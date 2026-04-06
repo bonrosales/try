@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,1047 @@
   <title>AIV1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root{
+      --teal:#00e5cc;
+      --tealdark:#00b8a3;
+      --coral:#f04d5c;
+      --darkone:#050d14;
+      --darktwo:#091520;
+      --glass:rgba(255,255,255,.07);
+      --glasstwo:rgba(255,255,255,.11);
+      --glassthree:rgba(255,255,255,.16);
+      --borderone:rgba(255,255,255,.13);
+      --bordertwo:rgba(255,255,255,.22);
+      --textmain:#f0f8ff;
+      --textsoft:rgba(240,248,255,.78);
+      --textmute:rgba(240,248,255,.45);
+      --shadow:0 8px 32px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.1);
+      --round:20px;
+      --roundsmall:12px;
+      --roundlarge:26px;
+      --pill:999px;
+      --headspace:70px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      background:var(--darkone);
+      color:var(--textmain);
+      font-family:"DM Sans",sans-serif;
+      overflow-x:hidden;
+      padding-top:var(--headspace);
+    }
+
+    ::-webkit-scrollbar{
+      width:4px;
+    }
+
+    ::-webkit-scrollbar-track{
+      background:var(--darkone);
+    }
+
+    ::-webkit-scrollbar-thumb{
+      background:var(--teal);
+      border-radius:4px;
+    }
+
+    #progress{
+      position:fixed;
+      top:0;
+      left:0;
+      height:2px;
+      width:0;
+      background:linear-gradient(90deg,var(--teal),var(--coral));
+      z-index:10001;
+      transition:width .1s;
+    }
+
+    #bgcanvas{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+    }
+
+    #header{
+      position:fixed;
+      top:11px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:100;
+      height:46px;
+      background:#fff;
+      border-radius:var(--pill);
+      display:flex;
+      align-items:center;
+      padding:0 1rem;
+      gap:.5rem;
+      box-shadow:0 4px 28px rgba(0,0,0,.28),0 0 0 1px rgba(255,255,255,.9);
+      transition:box-shadow .3s;
+      width:min(1140px,calc(100vw - 1.4rem));
+    }
+
+    #header.scrolled{
+      box-shadow:0 8px 40px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.95);
+    }
+
+    #logo{
+      font-family:"Sora",sans-serif;
+      font-weight:800;
+      text-decoration:none;
+      font-size:1.08rem;
+      color:#050d14;
+      letter-spacing:-.04em;
+      flex-shrink:0;
+    }
+
+    #logo .blue{
+      color:#1a6fff;
+    }
+
+    #logo .red{
+      color:var(--coral);
+    }
+
+    #nav{
+      display:flex;
+      align-items:center;
+      gap:.06rem;
+      flex:1;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .navbtn{
+      padding:.26rem .68rem;
+      border:none;
+      background:transparent;
+      color:#374151;
+      font-family:"DM Sans",sans-serif;
+      font-size:.8rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:.2s;
+      border-radius:var(--pill);
+      white-space:nowrap;
+    }
+
+    .navbtn:hover{
+      background:#f3f4f6;
+      color:#050d14;
+    }
+
+    #right{
+      display:flex;
+      align-items:center;
+      gap:.35rem;
+      flex-shrink:0;
+    }
+
+    #stats{
+      display:flex;
+      gap:.25rem;
+      font-size:.63rem;
+    }
+
+    #stats span{
+      background:#f3f4f6;
+      border:1px solid #e5e7eb;
+      color:#374151;
+      padding:.14rem .4rem;
+      border-radius:var(--pill);
+      font-weight:700;
+    }
+
+    #menubtn{
+      height:28px;
+      padding:0 .68rem;
+      border:1.5px solid #e5e7eb;
+      background:transparent;
+      cursor:pointer;
+      color:#374151;
+      font-size:.72rem;
+      font-weight:700;
+      transition:.2s;
+      border-radius:var(--pill);
+      font-family:"DM Sans",sans-serif;
+      display:none;
+    }
+
+    #menubtn:hover{
+      border-color:#050d14;
+      color:#050d14;
+    }
+
+    #menu{
+      position:fixed;
+      top:67px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:var(--round);
+      width:205px;
+      display:none;
+      flex-direction:column;
+      z-index:200;
+      box-shadow:0 16px 48px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+
+    #menu.open{
+      display:flex;
+    }
+
+    .menubtn{
+      border:none;
+      border-bottom:1px solid #f3f4f6;
+      padding:.66rem 1rem;
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:#111;
+      font-family:"DM Sans",sans-serif;
+      font-size:.8rem;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .menubtn:hover{
+      background:#f9fafb;
+    }
+
+    .section{
+      position:relative;
+      z-index:1;
+      padding:4rem 2rem;
+      opacity:0;
+      transform:translateY(28px);
+      transition:opacity .7s,transform .7s;
+    }
+
+    .section.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .inner{
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    #hero{
+      padding:5rem 2rem;
+      min-height:calc(100vh - var(--headspace));
+      display:flex;
+      align-items:center;
+      opacity:1;
+      transform:none;
+    }
+
+    .heroinner{
+      display:grid;
+      grid-template-columns:440px 1fr;
+      gap:4rem;
+      align-items:center;
+      width:100%;
+    }
+
+    #cardscene{
+      width:100%;
+      max-width:440px;
+    }
+
+    #cardmain{
+      width:100%;
+      height:278px;
+      transform-style:preserve-3d;
+      transition:transform .8s cubic-bezier(.22,.8,.2,1);
+      position:relative;
+      border-radius:22px;
+      perspective:1200px;
+      cursor:pointer;
+    }
+
+    #cardmain.flip{
+      transform:rotateY(180deg);
+    }
+
+    .cardside{
+      position:absolute;
+      inset:0;
+      border-radius:22px;
+      backface-visibility:hidden;
+      -webkit-backface-visibility:hidden;
+      overflow:hidden;
+    }
+
+    .cardfront{
+      background:rgba(255,255,255,.1);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      border:1px solid rgba(255,255,255,.2);
+      box-shadow:var(--shadow);
+      z-index:2;
+      transform:rotateY(0deg);
+    }
+
+    .cardback{
+      background:linear-gradient(135deg,rgba(0,229,204,.12),rgba(5,13,20,.92));
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      border:1px solid rgba(0,229,204,.2);
+      transform:rotateY(180deg);
+      box-shadow:0 24px 64px rgba(0,0,0,.5);
+    }
+
+    .cardinner{
+      position:relative;
+      z-index:2;
+      padding:1.35rem 1.65rem;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      gap:.48rem;
+    }
+
+    .cardtop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      border-bottom:1px solid rgba(255,255,255,.11);
+      padding-bottom:.55rem;
+    }
+
+    .cardorg{
+      font-size:.5rem;
+      color:var(--textmute);
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:600;
+    }
+
+    .cardname{
+      font-family:"Sora",sans-serif;
+      font-size:.98rem;
+      font-weight:800;
+      color:var(--textmain);
+      line-height:1.15;
+      margin-top:.16rem;
+    }
+
+    .cardtag{
+      font-size:.48rem;
+      color:var(--teal);
+      border:1px solid var(--teal);
+      padding:.09rem .36rem;
+      border-radius:3px;
+      letter-spacing:.1em;
+      font-weight:800;
+      background:rgba(0,229,204,.1);
+    }
+
+    .cardmiddle{
+      display:flex;
+      gap:1.15rem;
+      align-items:center;
+      flex:1;
+    }
+
+    .cardphoto{
+      width:68px;
+      height:68px;
+      border-radius:12px;
+      flex-shrink:0;
+      background:linear-gradient(135deg,rgba(0,229,204,.18),rgba(0,229,204,.04));
+      border:1.5px solid rgba(0,229,204,.28);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.45rem;
+      font-weight:800;
+      box-shadow:0 0 18px rgba(0,229,204,.1);
+    }
+
+    .cardinfo{
+      flex:1;
+    }
+
+    .cardtitle{
+      font-family:"Sora",sans-serif;
+      font-size:.98rem;
+      font-weight:800;
+      color:var(--textmain);
+      line-height:1.15;
+      margin-bottom:.16rem;
+    }
+
+    .cardrole{
+      font-size:.62rem;
+      color:var(--textmute);
+      font-weight:600;
+      margin-bottom:.3rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .chips{
+      display:flex;
+      gap:.22rem;
+      flex-wrap:wrap;
+    }
+
+    .chip{
+      font-size:.48rem;
+      padding:.09rem .36rem;
+      border-radius:99px;
+      font-weight:800;
+    }
+
+    .chipteal{
+      background:rgba(0,229,204,.14);
+      border:1px solid rgba(0,229,204,.28);
+      color:var(--teal);
+    }
+
+    .chipred{
+      background:rgba(240,77,92,.14);
+      border:1px solid rgba(240,77,92,.28);
+      color:var(--coral);
+    }
+
+    .chipwhite{
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.18);
+      color:var(--textsoft);
+    }
+
+    .cardbottom{
+      border-top:1px solid rgba(255,255,255,.09);
+      padding-top:.48rem;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .barcode{
+      display:flex;
+      gap:1px;
+      align-items:flex-end;
+      height:20px;
+    }
+
+    .barcode span{
+      display:block;
+      width:2px;
+      background:rgba(255,255,255,.32);
+    }
+
+    .barcode span:nth-child(1){height:17px}
+    .barcode span:nth-child(2){height:13px}
+    .barcode span:nth-child(3){height:19px}
+    .barcode span:nth-child(4){height:8px}
+    .barcode span:nth-child(5){height:18px}
+    .barcode span:nth-child(6){height:12px}
+    .barcode span:nth-child(7){height:20px}
+    .barcode span:nth-child(8){height:9px}
+    .barcode span:nth-child(9){height:18px}
+    .barcode span:nth-child(10){height:15px}
+    .barcode span:nth-child(11){height:10px}
+    .barcode span:nth-child(12){height:18px}
+    .barcode span:nth-child(13){height:14px}
+    .barcode span:nth-child(14){height:20px}
+    .barcode span:nth-child(15){height:11px}
+
+    .serial{
+      font-size:.48rem;
+      color:var(--textmute);
+      letter-spacing:.1em;
+      font-weight:600;
+    }
+
+    .cardbackinner{
+      padding:1.35rem 1.65rem;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      gap:.48rem;
+      justify-content:center;
+    }
+
+    .backstripe{
+      height:30px;
+      background:rgba(255,255,255,.07);
+      border-radius:4px;
+      margin-bottom:.28rem;
+    }
+
+    .backnote{
+      font-size:.56rem;
+      color:rgba(0,229,204,.78);
+      line-height:1.6;
+      text-align:center;
+      border:1px solid rgba(0,229,204,.16);
+      padding:.48rem;
+      border-radius:7px;
+      min-height:88px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      white-space:pre-wrap;
+    }
+
+    .fliptext{
+      font-size:.58rem;
+      color:var(--textmute);
+      font-weight:600;
+      letter-spacing:.08em;
+      text-align:center;
+      margin-top:.52rem;
+    }
+
+    .fliphint{
+      font-size:.58rem;
+      color:var(--textmute);
+      font-weight:600;
+      letter-spacing:.08em;
+      text-align:center;
+      margin-top:.52rem;
+    }
+
+    .herotext{
+      color:var(--textmain);
+    }
+
+    .roleline{
+      font-size:.8rem;
+      font-weight:600;
+      color:var(--teal);
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      margin-bottom:.8rem;
+    }
+
+    .herotitle{
+      font-family:"Sora",sans-serif;
+      font-size:clamp(1.75rem,3.4vw,2.7rem);
+      font-weight:800;
+      line-height:1.05;
+      letter-spacing:-.04em;
+      margin-bottom:.28rem;
+    }
+
+    .herodesc{
+      font-size:.86rem;
+      color:var(--textsoft);
+      font-weight:400;
+      margin-bottom:1.15rem;
+      line-height:1.6;
+    }
+
+    .highlights{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:.6rem;
+      margin-bottom:1.05rem;
+    }
+
+    .highlight{
+      text-align:center;
+      border:1px solid var(--borderone);
+      border-radius:var(--round);
+      padding:.68rem .38rem;
+      background:var(--glass);
+      backdrop-filter:blur(12px);
+    }
+
+    .value{
+      font-family:"Sora",sans-serif;
+      font-size:1.25rem;
+      font-weight:800;
+      color:var(--teal);
+      line-height:1;
+    }
+
+    .label{
+      font-size:.56rem;
+      color:var(--textmute);
+      font-weight:600;
+      margin-top:.14rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .metalist{
+      display:flex;
+      gap:.8rem;
+      flex-wrap:wrap;
+    }
+
+    .metaitem{
+      display:flex;
+      align-items:center;
+      gap:.25rem;
+      font-size:.74rem;
+      color:var(--textmute);
+      font-weight:500;
+    }
+
+    .glass{
+      background:var(--glass);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      border:1px solid var(--borderone);
+      border-radius:var(--roundlarge);
+      box-shadow:var(--shadow);
+      padding:2.6rem;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .glass::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+    }
+
+    .smalltitle{
+      font-size:.6rem;
+      font-weight:800;
+      color:var(--teal);
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      margin-bottom:.48rem;
+    }
+
+    .title{
+      font-family:"Sora",sans-serif;
+      font-size:clamp(1.55rem,2.7vw,2.1rem);
+      font-weight:800;
+      color:var(--textmain);
+      margin-bottom:.38rem;
+      letter-spacing:-.03em;
+      line-height:1.12;
+    }
+
+    .subtitle{
+      color:var(--textmute);
+      font-size:.88rem;
+      margin-bottom:1.5rem;
+      line-height:1.75;
+      max-width:650px;
+    }
+
+    .twocol{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:1rem;
+    }
+
+    .infoitem{
+      background:var(--glasstwo);
+      border:1px solid var(--borderone);
+      border-radius:var(--round);
+      padding:1rem;
+    }
+
+    .infoitem h3{
+      font-family:"Sora",sans-serif;
+      font-size:.9rem;
+      margin-bottom:.35rem;
+    }
+
+    .infoitem p{
+      color:var(--textsoft);
+      font-size:.8rem;
+      line-height:1.7;
+    }
+
+    .postgrid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+      gap:.95rem;
+      margin-top:1.5rem;
+    }
+
+    .postcard{
+      background:var(--glasstwo);
+      border:1px solid var(--borderone);
+      border-radius:var(--round);
+      overflow:hidden;
+      transition:.28s;
+    }
+
+    .postcard:hover{
+      background:var(--glassthree);
+      border-color:var(--bordertwo);
+      transform:translateY(-4px);
+      box-shadow:0 16px 40px rgba(0,0,0,.35);
+    }
+
+    .postimg{
+      width:100%;
+      height:115px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:2.4rem;
+      background:linear-gradient(135deg,rgba(0,229,204,.08),rgba(0,229,204,.02));
+    }
+
+    .postbody{
+      padding:1rem;
+    }
+
+    .postmeta{
+      font-size:.6rem;
+      color:var(--textmute);
+      margin-bottom:.26rem;
+      font-weight:600;
+    }
+
+    .posttitle{
+      font-family:"Sora",sans-serif;
+      font-size:.84rem;
+      color:var(--textmain);
+      margin-bottom:.26rem;
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .posttext{
+      color:var(--textmute);
+      font-size:.76rem;
+      line-height:1.7;
+    }
+
+    .postactions{
+      display:flex;
+      align-items:center;
+      gap:.26rem;
+      padding:.46rem .85rem;
+      border-top:1px solid var(--borderone);
+    }
+
+    .likebtn,
+    .sharebtn{
+      background:transparent;
+      border:none;
+      cursor:pointer;
+      font-size:.68rem;
+      display:flex;
+      align-items:center;
+      gap:.17rem;
+      font-family:"DM Sans",sans-serif;
+      font-weight:700;
+      transition:.2s;
+      padding:.19rem .42rem;
+      border-radius:5px;
+    }
+
+    .likebtn{
+      color:var(--textmute);
+    }
+
+    .likebtn:hover{
+      background:rgba(240,77,92,.1);
+      color:var(--coral);
+    }
+
+    .likebtn.active{
+      color:var(--coral);
+    }
+
+    .sharebtn{
+      color:var(--teal);
+      margin-left:auto;
+    }
+
+    .sharebtn:hover{
+      background:rgba(0,229,204,.07);
+    }
+
+    .skillgrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1rem 2rem;
+    }
+
+    .skillitem{
+      margin-bottom:1rem;
+    }
+
+    .skillhead{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:.35rem;
+      align-items:center;
+      color:var(--textsoft);
+      font-size:.78rem;
+      font-weight:600;
+    }
+
+    .skillhead span:last-child{
+      font-family:"Sora",sans-serif;
+      font-size:.76rem;
+      font-weight:800;
+      color:var(--teal);
+    }
+
+    .skilltrack{
+      height:5px;
+      background:rgba(255,255,255,.07);
+      border-radius:99px;
+      overflow:hidden;
+    }
+
+    .skillbar{
+      height:100%;
+      background:linear-gradient(90deg,var(--tealdark),var(--teal));
+      width:0;
+      transition:width 1.4s ease;
+    }
+
+    .contactrow{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:1rem;
+    }
+
+    .contactbox{
+      background:var(--glasstwo);
+      border:1px solid var(--borderone);
+      border-radius:var(--round);
+      padding:1.2rem 1rem;
+      color:var(--textsoft);
+      text-align:center;
+      min-height:110px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    #popup{
+      position:fixed;
+      inset:0;
+      background:rgba(5,13,20,.72);
+      backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:20000;
+      padding:1rem;
+    }
+
+    #popup.show{
+      display:flex;
+    }
+
+    #popupbox{
+      width:min(480px,100%);
+      background:linear-gradient(180deg,rgba(12,25,37,.96),rgba(6,15,24,.98));
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:0 20px 70px rgba(0,0,0,.45);
+      border-radius:22px;
+      padding:1.4rem;
+      text-align:center;
+    }
+
+    #popupbox h2{
+      font-family:"Sora",sans-serif;
+      font-size:1.2rem;
+      margin-bottom:.45rem;
+      color:#fff;
+    }
+
+    #popupbox p{
+      color:rgba(240,248,255,.78);
+      font-size:.92rem;
+      line-height:1.5;
+      margin-bottom:1rem;
+    }
+
+    .inputgroup{
+      display:grid;
+      gap:.7rem;
+      margin-bottom:1rem;
+      text-align:left;
+    }
+
+    .inputgroup label{
+      font-size:.78rem;
+      color:var(--textsoft);
+      font-weight:700;
+    }
+
+    .inputgroup input,
+    .inputgroup textarea{
+      width:100%;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      color:#fff;
+      border-radius:14px;
+      padding:.9rem 1rem;
+      font-family:"DM Sans",sans-serif;
+      font-size:.92rem;
+      outline:none;
+    }
+
+    .inputgroup textarea{
+      resize:vertical;
+      min-height:88px;
+    }
+
+    .inputgroup input:focus,
+    .inputgroup textarea:focus{
+      border-color:rgba(0,229,204,.45);
+      box-shadow:0 0 0 3px rgba(0,229,204,.08);
+    }
+
+    .btnrow{
+      display:flex;
+      gap:.7rem;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    #popupbtn,
+    #savebtn,
+    #clearbtn{
+      border:none;
+      outline:none;
+      font-weight:800;
+      font-family:"DM Sans",sans-serif;
+      font-size:.95rem;
+      padding:.9rem 1.25rem;
+      border-radius:999px;
+      cursor:pointer;
+      transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+
+    #popupbtn{
+      background:linear-gradient(90deg,#00e5cc,#00b8a3);
+      color:#041017;
+      box-shadow:0 10px 28px rgba(0,229,204,.28);
+    }
+
+    #savebtn{
+      background:rgba(255,255,255,.09);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    #clearbtn{
+      background:rgba(240,77,92,.12);
+      color:#fff;
+      border:1px solid rgba(240,77,92,.2);
+    }
+
+    #popupbtn:hover,
+    #savebtn:hover,
+    #clearbtn:hover{
+      transform:translateY(-1px);
+    }
+
+    #popupbtn:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    #popupstatus{
+      margin-top:1rem;
+      font-size:.85rem;
+      color:rgba(240,248,255,.72);
+      min-height:20px;
+      white-space:pre-wrap;
+    }
+
+    @media (max-width:980px){
+      .heroinner{
+        grid-template-columns:1fr;
+        gap:2.2rem;
+      }
+
+      #cardscene{
+        margin:0 auto;
+      }
+
+      .skillgrid,
+      .twocol,
+      .contactrow{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:860px){
+      #nav{
+        display:none;
+      }
+
+      #stats{
+        display:none;
+      }
+
+      #menubtn{
+        display:flex;
+        align-items:center;
+      }
+    }
+
+    @media (max-width:640px){
+      #hero,
+      .section{
+        padding:3rem 1rem;
+      }
+
+      .glass{
+        padding:1.35rem;
+      }
+
+      #header{
+        width:min(1140px,calc(100vw - .8rem));
+        padding:0 .7rem;
+      }
+
+      #cardmain{
+        height:250px;
+      }
+
+      .cardinner,
+      .cardbackinner{
+        padding:1rem;
+      }
+
+      .highlights{
+        grid-template-columns:1fr;
+      }
+
+      .cardmiddle{
+        gap:.8rem;
+      }
+
+      .cardphoto{
+        width:58px;
+        height:58px;
+        font-size:1.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="progress"></div>
@@ -16,8 +1055,24 @@
   <div id="popup" class="show">
     <div id="popupbox">
       <h2>Server Connection</h2>
-      <p>Click the button below to connect your project to the private json storage.</p>
-      <button id="popupbtn">Connect To Server</button>
+      <p>Enter your JsonBin Bin Id and Master Key, then connect.</p>
+
+      <div class="inputgroup">
+        <label for="bininput">Bin Id</label>
+        <input id="bininput" type="text" placeholder="Enter bin id">
+      </div>
+
+      <div class="inputgroup">
+        <label for="keyinput">Master Key</label>
+        <textarea id="keyinput" placeholder="Enter master key"></textarea>
+      </div>
+
+      <div class="btnrow">
+        <button id="popupbtn">Connect To Server</button>
+        <button id="savebtn" type="button">Save</button>
+        <button id="clearbtn" type="button">Clear</button>
+      </div>
+
       <div id="popupstatus">Waiting for connection...</div>
     </div>
   </div>
@@ -37,7 +1092,7 @@
       <div id="stats">
         <span>Design</span>
         <span>Code</span>
-        <span>Glass</span>
+        <span>JsonBin</span>
       </div>
       <button id="menubtn">Menu</button>
     </div>
@@ -94,11 +1149,7 @@
           <div class="cardside cardback">
             <div class="cardbackinner">
               <div class="backstripe"></div>
-              <div class="backnote">
-                This back side stays in the exact same position while flipping.
-                <br><br>
-                Your popup connects through your own server route and keeps private keys out of the browser.
-              </div>
+              <div class="backnote" id="backnote">This back side stays in the exact same position while flipping.</div>
               <div class="fliptext">Click card to flip</div>
             </div>
           </div>
@@ -109,10 +1160,10 @@
 
       <div class="herotext">
         <div class="roleline">Creative Interface</div>
-        <h1 class="herotitle">A smooth glass website with a fixed flip card and startup server popup.</h1>
+        <h1 class="herotitle">A smooth glass website with a fixed flip card and startup connection popup.</h1>
         <p class="herodesc">
           This version keeps the front side as the main side, flips the back in the same exact place,
-          and adds a clean connect popup from the start of the website.
+          and connects directly to JsonBin from one single html file.
         </p>
 
         <div class="highlights">
@@ -126,14 +1177,14 @@
           </div>
           <div class="highlight">
             <div class="value">03</div>
-            <div class="label">Private Bin Ready</div>
+            <div class="label">One File Only</div>
           </div>
         </div>
 
         <div class="metalist">
           <div class="metaitem">Glassmorphism style</div>
           <div class="metaitem">Responsive layout</div>
-          <div class="metaitem">Pure html css js</div>
+          <div class="metaitem">Pure single html</div>
         </div>
       </div>
     </div>
@@ -163,8 +1214,8 @@
             <p>A popup opens immediately so the user can connect before using the website.</p>
           </div>
           <div class="infoitem">
-            <h3>Private server route</h3>
-            <p>The browser talks to your own server route, and the server talks to the private bin.</p>
+            <h3>Direct JsonBin</h3>
+            <p>The page connects directly using the bin id and master key entered into the popup.</p>
           </div>
         </div>
       </div>
@@ -208,9 +1259,9 @@
           <article class="postcard">
             <div class="postimg">🔒</div>
             <div class="postbody">
-              <div class="postmeta">Security</div>
-              <div class="posttitle">Private bin through server</div>
-              <div class="posttext">Private access stays in the backend while the browser only calls your endpoint.</div>
+              <div class="postmeta">JsonBin</div>
+              <div class="posttitle">Private bin input popup</div>
+              <div class="posttext">Enter your own credentials in the popup and connect directly from the page.</div>
             </div>
             <div class="postactions">
               <button class="likebtn">Like</button>
@@ -256,7 +1307,7 @@
 
           <div class="skillitem">
             <div class="skillhead">
-              <span>Server Connect</span>
+              <span>JsonBin Connect</span>
               <span>88%</span>
             </div>
             <div class="skilltrack"><div class="skillbar" datawidth="88%"></div></div>
@@ -272,7 +1323,7 @@
         <div class="smalltitle">CONTACT</div>
         <h2 class="title">Ready for your project</h2>
         <p class="subtitle">
-          Keep editing the content, images, labels, and server logic as needed for your website.
+          Keep editing the content, images, labels, and connection logic as needed for your website.
         </p>
 
         <div class="contactrow">
@@ -284,6 +1335,262 @@
     </div>
   </section>
 
-  <script src="script.js"></script>
+  <script>
+    const popup = document.getElementById("popup");
+    const popupbtn = document.getElementById("popupbtn");
+    const savebtn = document.getElementById("savebtn");
+    const clearbtn = document.getElementById("clearbtn");
+    const popupstatus = document.getElementById("popupstatus");
+    const bininput = document.getElementById("bininput");
+    const keyinput = document.getElementById("keyinput");
+    const backnote = document.getElementById("backnote");
+    const cardmain = document.getElementById("cardmain");
+    const header = document.getElementById("header");
+    const progress = document.getElementById("progress");
+    const menubtn = document.getElementById("menubtn");
+    const menu = document.getElementById("menu");
+    const sections = document.querySelectorAll(".section");
+    const skillbars = document.querySelectorAll(".skillbar");
+    const likebtns = document.querySelectorAll(".likebtn");
+    const navbtns = document.querySelectorAll(".navbtn");
+    const menubtns = document.querySelectorAll(".menubtn");
+    const canvas = document.getElementById("bgcanvas");
+    const ctx = canvas.getContext("2d");
+
+    function gotosection(id){
+      const el = document.getElementById(id);
+      if(el){
+        el.scrollIntoView({ behavior:"smooth", block:"start" });
+      }
+    }
+
+    navbtns.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        gotosection(btn.getAttribute("datago"));
+      });
+    });
+
+    menubtns.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        gotosection(btn.getAttribute("datago"));
+        menu.classList.remove("open");
+      });
+    });
+
+    menubtn.addEventListener("click", function(){
+      menu.classList.toggle("open");
+    });
+
+    document.addEventListener("click", function(e){
+      if(!menu.contains(e.target) && e.target !== menubtn){
+        menu.classList.remove("open");
+      }
+    });
+
+    cardmain.addEventListener("click", function(){
+      cardmain.classList.toggle("flip");
+    });
+
+    likebtns.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        btn.classList.toggle("active");
+      });
+    });
+
+    function updatescroll(){
+      const top = window.scrollY;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const value = height > 0 ? (top / height) * 100 : 0;
+      progress.style.width = value + "%";
+
+      if(top > 15){
+        header.classList.add("scrolled");
+      }else{
+        header.classList.remove("scrolled");
+      }
+    }
+
+    function revealsections(){
+      const trigger = window.innerHeight * 0.86;
+
+      sections.forEach(function(section){
+        const rect = section.getBoundingClientRect();
+        if(rect.top < trigger){
+          section.classList.add("visible");
+        }
+      });
+
+      skillbars.forEach(function(bar){
+        const rect = bar.getBoundingClientRect();
+        if(rect.top < trigger){
+          bar.style.width = bar.getAttribute("datawidth");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", function(){
+      updatescroll();
+      revealsections();
+    });
+
+    updatescroll();
+    revealsections();
+
+    function loadstored(){
+      const savedbin = localStorage.getItem("jsonbinid") || "";
+      const savedkey = localStorage.getItem("jsonbinmasterkey") || "";
+      bininput.value = savedbin;
+      keyinput.value = savedkey;
+    }
+
+    function savestored(){
+      localStorage.setItem("jsonbinid", bininput.value.trim());
+      localStorage.setItem("jsonbinmasterkey", keyinput.value.trim());
+      popupstatus.textContent = "Saved locally in this browser";
+    }
+
+    function clearstored(){
+      localStorage.removeItem("jsonbinid");
+      localStorage.removeItem("jsonbinmasterkey");
+      bininput.value = "";
+      keyinput.value = "";
+      popupstatus.textContent = "Saved values cleared";
+    }
+
+    savebtn.addEventListener("click", savestored);
+    clearbtn.addEventListener("click", clearstored);
+    loadstored();
+
+    async function connectjson(){
+      const binid = bininput.value.trim();
+      const masterkey = keyinput.value.trim();
+
+      if(!binid){
+        popupstatus.textContent = "Please enter bin id";
+        return;
+      }
+
+      if(!masterkey){
+        popupstatus.textContent = "Please enter master key";
+        return;
+      }
+
+      popupbtn.disabled = true;
+      popupstatus.textContent = "Connecting...";
+
+      try{
+        const response = await fetch("https://api.jsonbin.io/v3/b/" + binid + "/latest", {
+          method:"GET",
+          headers:{
+            "X-Master-Key": masterkey,
+            "Content-Type":"application/json"
+          }
+        });
+
+        const text = await response.text();
+
+        let data;
+        try{
+          data = JSON.parse(text);
+        }catch{
+          throw new Error("Server returned invalid response");
+        }
+
+        if(!response.ok){
+          throw new Error(data.message || "Connection failed");
+        }
+
+        const record = data.record || data;
+        let preview = "";
+
+        if(typeof record === "string"){
+          preview = record;
+        }else{
+          preview = JSON.stringify(record, null, 2);
+        }
+
+        backnote.textContent = "Connected successfully\n\n" + preview.slice(0, 220);
+        popupstatus.textContent = "Connected successfully";
+
+        localStorage.setItem("jsonbinid", binid);
+        localStorage.setItem("jsonbinmasterkey", masterkey);
+
+        setTimeout(function(){
+          popup.classList.remove("show");
+        }, 900);
+      }catch(error){
+        popupstatus.textContent = error.message || "Connection failed";
+        popupbtn.disabled = false;
+      }
+    }
+
+    popupbtn.addEventListener("click", connectjson);
+
+    function resizecanvas(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    const dots = [];
+    const dotcount = 42;
+
+    function createdots(){
+      dots.length = 0;
+      for(let i = 0; i < dotcount; i++){
+        dots.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2 + 0.6,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25
+        });
+      }
+    }
+
+    function drawbg(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for(let i = 0; i < dots.length; i++){
+        const d = dots[i];
+        d.x += d.vx;
+        d.y += d.vy;
+
+        if(d.x < 0 || d.x > canvas.width) d.vx *= -1;
+        if(d.y < 0 || d.y > canvas.height) d.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(0,229,204,0.28)";
+        ctx.fill();
+
+        for(let j = i + 1; j < dots.length; j++){
+          const n = dots[j];
+          const dx = d.x - n.x;
+          const dy = d.y - n.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if(dist < 110){
+            ctx.beginPath();
+            ctx.moveTo(d.x, d.y);
+            ctx.lineTo(n.x, n.y);
+            ctx.strokeStyle = "rgba(0,229,204," + (0.09 - dist / 1500) + ")";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(drawbg);
+    }
+
+    resizecanvas();
+    createdots();
+    drawbg();
+
+    window.addEventListener("resize", function(){
+      resizecanvas();
+      createdots();
+    });
+  </script>
 </body>
 </html>
