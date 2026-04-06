@@ -5,8 +5,8 @@ const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 
-const jsonbinaccesskey = process.env.JSONBIN_ACCESS_KEY || "69d13eee36566621a87bf035 ";
-const jsonbinmasterkey = process.env.JSONBIN_MASTER_KEY || "$2a$10$oC2hITt.J6Hua7Zyv8n2/.COKA0TXaqjX/ejTDYjbVEbAGEZXxUm.";
+const jsonbinaccesskey = process.env.JSONBIN_ACCESS_KEY || "69d13eee36566621a87bf035";
+const jsonbinmasterkey = process.env.JSONBIN_MASTER_KEY || "$2a$10$oC2hITt.J6Hua7Zyv8n2/.COKA0TXaqjX/ejTDYjbVEbAGEZXxUm";
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
