@@ -1,0 +1,289 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>AIV1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="progress"></div>
+  <canvas id="bgcanvas"></canvas>
+
+  <div id="popup" class="show">
+    <div id="popupbox">
+      <h2>Server Connection</h2>
+      <p>Click the button below to connect your project to the private json storage.</p>
+      <button id="popupbtn">Connect To Server</button>
+      <div id="popupstatus">Waiting for connection...</div>
+    </div>
+  </div>
+
+  <header id="header">
+    <a href="#hero" id="logo"><span class="blue">AIV</span><span class="red">1</span></a>
+
+    <nav id="nav">
+      <button class="navbtn" datago="hero">Home</button>
+      <button class="navbtn" datago="about">About</button>
+      <button class="navbtn" datago="posts">Posts</button>
+      <button class="navbtn" datago="skills">Skills</button>
+      <button class="navbtn" datago="contact">Contact</button>
+    </nav>
+
+    <div id="right">
+      <div id="stats">
+        <span>Design</span>
+        <span>Code</span>
+        <span>Glass</span>
+      </div>
+      <button id="menubtn">Menu</button>
+    </div>
+  </header>
+
+  <div id="menu">
+    <button class="menubtn" datago="hero">Home</button>
+    <button class="menubtn" datago="about">About</button>
+    <button class="menubtn" datago="posts">Posts</button>
+    <button class="menubtn" datago="skills">Skills</button>
+    <button class="menubtn" datago="contact">Contact</button>
+  </div>
+
+  <section id="hero" class="section visible">
+    <div class="inner heroinner">
+      <div id="cardscene">
+        <div id="cardmain">
+          <div class="cardside cardfront">
+            <div class="cardinner">
+              <div class="cardtop">
+                <div>
+                  <div class="cardorg">AIV1 DIGITAL PROFILE</div>
+                  <div class="cardname">Interactive Card</div>
+                </div>
+                <div class="cardtag">ACTIVE</div>
+              </div>
+
+              <div class="cardmiddle">
+                <div class="cardphoto">AI</div>
+
+                <div class="cardinfo">
+                  <div class="cardtitle">Frontend Experience</div>
+                  <div class="cardrole">Modern glass style website</div>
+
+                  <div class="chips">
+                    <span class="chip chipteal">Html</span>
+                    <span class="chip chipred">Css</span>
+                    <span class="chip chipwhite">Js</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cardbottom">
+                <div class="barcode">
+                  <span></span><span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="serial">FRONT PRIMARY POSITION</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cardside cardback">
+            <div class="cardbackinner">
+              <div class="backstripe"></div>
+              <div class="backnote">
+                This back side stays in the exact same position while flipping.
+                <br><br>
+                Your popup connects through your own server route and keeps private keys out of the browser.
+              </div>
+              <div class="fliptext">Click card to flip</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fliphint">Click card to flip</div>
+      </div>
+
+      <div class="herotext">
+        <div class="roleline">Creative Interface</div>
+        <h1 class="herotitle">A smooth glass website with a fixed flip card and startup server popup.</h1>
+        <p class="herodesc">
+          This version keeps the front side as the main side, flips the back in the same exact place,
+          and adds a clean connect popup from the start of the website.
+        </p>
+
+        <div class="highlights">
+          <div class="highlight">
+            <div class="value">01</div>
+            <div class="label">Popup Connect</div>
+          </div>
+          <div class="highlight">
+            <div class="value">02</div>
+            <div class="label">Fixed Flip</div>
+          </div>
+          <div class="highlight">
+            <div class="value">03</div>
+            <div class="label">Private Bin Ready</div>
+          </div>
+        </div>
+
+        <div class="metalist">
+          <div class="metaitem">Glassmorphism style</div>
+          <div class="metaitem">Responsive layout</div>
+          <div class="metaitem">Pure html css js</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="inner">
+      <div class="glass">
+        <div class="smalltitle">ABOUT</div>
+        <h2 class="title">About this website</h2>
+        <p class="subtitle">
+          This layout follows your current website direction with a dark premium background,
+          bright pill header, glass sections, a highlighted hero, and a card interaction area.
+        </p>
+
+        <div class="twocol">
+          <div class="infoitem">
+            <h3>Front first</h3>
+            <p>The front side loads first and remains the primary visual position before any interaction.</p>
+          </div>
+          <div class="infoitem">
+            <h3>Same back position</h3>
+            <p>The back side is absolutely aligned so the card flips in place without shifting.</p>
+          </div>
+          <div class="infoitem">
+            <h3>Startup popup</h3>
+            <p>A popup opens immediately so the user can connect before using the website.</p>
+          </div>
+          <div class="infoitem">
+            <h3>Private server route</h3>
+            <p>The browser talks to your own server route, and the server talks to the private bin.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="posts" class="section">
+    <div class="inner">
+      <div class="glass">
+        <div class="smalltitle">POSTS</div>
+        <h2 class="title">Featured cards</h2>
+        <p class="subtitle">Sample content blocks matching your current glass card website style.</p>
+
+        <div class="postgrid">
+          <article class="postcard">
+            <div class="postimg">✨</div>
+            <div class="postbody">
+              <div class="postmeta">Ui Upgrade</div>
+              <div class="posttitle">Popup starts on page load</div>
+              <div class="posttext">A clean startup modal prompts the user to connect before continuing.</div>
+            </div>
+            <div class="postactions">
+              <button class="likebtn">Like</button>
+              <button class="sharebtn">Share</button>
+            </div>
+          </article>
+
+          <article class="postcard">
+            <div class="postimg">🪪</div>
+            <div class="postbody">
+              <div class="postmeta">Card Motion</div>
+              <div class="posttitle">Fixed position flip effect</div>
+              <div class="posttext">The front and back stay perfectly aligned while rotating in three dimensions.</div>
+            </div>
+            <div class="postactions">
+              <button class="likebtn">Like</button>
+              <button class="sharebtn">Share</button>
+            </div>
+          </article>
+
+          <article class="postcard">
+            <div class="postimg">🔒</div>
+            <div class="postbody">
+              <div class="postmeta">Security</div>
+              <div class="posttitle">Private bin through server</div>
+              <div class="posttext">Private access stays in the backend while the browser only calls your endpoint.</div>
+            </div>
+            <div class="postactions">
+              <button class="likebtn">Like</button>
+              <button class="sharebtn">Share</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="section">
+    <div class="inner">
+      <div class="glass">
+        <div class="smalltitle">SKILLS</div>
+        <h2 class="title">Interface progress</h2>
+        <p class="subtitle">Animated bars to keep the same modern portfolio direction.</p>
+
+        <div class="skillgrid">
+          <div class="skillitem">
+            <div class="skillhead">
+              <span>Html Structure</span>
+              <span>95%</span>
+            </div>
+            <div class="skilltrack"><div class="skillbar" datawidth="95%"></div></div>
+          </div>
+
+          <div class="skillitem">
+            <div class="skillhead">
+              <span>Css Design</span>
+              <span>92%</span>
+            </div>
+            <div class="skilltrack"><div class="skillbar" datawidth="92%"></div></div>
+          </div>
+
+          <div class="skillitem">
+            <div class="skillhead">
+              <span>Js Interaction</span>
+              <span>90%</span>
+            </div>
+            <div class="skilltrack"><div class="skillbar" datawidth="90%"></div></div>
+          </div>
+
+          <div class="skillitem">
+            <div class="skillhead">
+              <span>Server Connect</span>
+              <span>88%</span>
+            </div>
+            <div class="skilltrack"><div class="skillbar" datawidth="88%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="inner">
+      <div class="glass">
+        <div class="smalltitle">CONTACT</div>
+        <h2 class="title">Ready for your project</h2>
+        <p class="subtitle">
+          Keep editing the content, images, labels, and server logic as needed for your website.
+        </p>
+
+        <div class="contactrow">
+          <div class="contactbox">Email style card section</div>
+          <div class="contactbox">Location style card section</div>
+          <div class="contactbox">Support style card section</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
