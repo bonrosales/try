@@ -54,21 +54,23 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 #hero{position:relative;z-index:1;padding:5rem 2rem;min-height:calc(100vh - var(--hdr));display:flex;align-items:center;}
 .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:440px 1fr;gap:4rem;align-items:center;width:100%;}
 #isc{
-  perspective:1000px;
+  perspective:900px;
   perspective-origin:50% 50%;
-  width:100%;max-width:460px;height:290px;
+  width:100%;
+  max-width:460px;
+  /* Use aspect-ratio to prevent any distortion on resize */
+  aspect-ratio:85.6/54; /* standard card ratio */
   cursor:pointer;
-  /* no transform here — keep it static so card stays in place */
+  position:relative;
 }
 #id-card{
-  width:100%;height:100%;
+  position:absolute;inset:0;
   transform-style:preserve-3d;
   transform-origin:50% 50%;
-  position:relative;border-radius:20px;
-  /* start with no transform at all */
+  border-radius:18px;
   will-change:transform;
 }
-.idf{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
+.idf{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
 
 /* ── FRONT: deep blue gradient like the reference ── */
 .id-front{
@@ -257,9 +259,9 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 
 /* ─── WORKS — chart left, compact 2-col legend right ─── */
 .wl{display:grid;grid-template-columns:240px 1fr;gap:1.6rem;align-items:start;margin-top:1.5rem;}
-.ww{position:relative;}
+.ww{position:relative;display:inline-block;}
 #wc{cursor:pointer;display:block;filter:drop-shadow(0 0 16px rgba(0,229,204,.1));}
-.wcl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;}
+.wcl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:90px;}
 .wcp{font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;color:var(--teal);line-height:1;}
 .wcn{font-size:.52rem;font-weight:600;color:var(--txt3);margin-top:.12rem;max-width:70px;line-height:1.3;}
 /* Legend: single 2-col grid */
@@ -283,12 +285,84 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 /* Keep wdet-col for backwards compat but unused now */
 .wdet-col{display:none;}
 
-/* ─── STATUS — fixed 2-col tile grid, hover reveals details ─── */
+/* ─── WORK EXPERIENCE — vertical bar chart ─── */
+.wexp-chart{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:.75rem;
+  height:220px;
+  margin-top:1.2rem;
+  padding-bottom:0;
+  position:relative;
+}
+/* Horizontal gridlines */
+.wexp-chart::before{
+  content:'';position:absolute;inset:0 0 36px 0;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.04) 0px,rgba(255,255,255,.04) 1px,
+    transparent 1px,transparent 25%
+  );
+  pointer-events:none;
+}
+.wexp-col{
+  display:flex;flex-direction:column;align-items:center;
+  flex:1;max-width:140px;min-width:60px;
+  gap:0;cursor:pointer;
+  position:relative;
+}
+.wexp-bar-wrap{
+  width:100%;flex:1;display:flex;align-items:flex-end;
+  padding:0 4px;
+}
+.wexp-bar{
+  width:100%;border-radius:8px 8px 0 0;
+  min-height:4px;height:0;
+  transition:height 1.2s cubic-bezier(.25,.46,.45,.94);
+  position:relative;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding-top:.35rem;
+}
+.wexp-bar-label{
+  font-family:'Sora',sans-serif;font-size:.65rem;font-weight:800;
+  color:rgba(255,255,255,.9);text-align:center;line-height:1.2;
+  position:relative;z-index:1;
+}
+/* Bottom axis label */
+.wexp-axis{
+  width:100%;text-align:center;
+  padding:.4rem .2rem 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  font-size:.6rem;font-weight:700;color:var(--txt2);line-height:1.3;
+}
+/* Tooltip on hover/tap */
+.wexp-tooltip{
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:rgba(6,18,32,.96);border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--rs);padding:.5rem .7rem;
+  min-width:130px;text-align:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s,transform .2s;
+  transform:translateX(-50%) translateY(4px);
+  z-index:10;white-space:nowrap;
+}
+.wexp-col:hover .wexp-tooltip,
+.wexp-col.wx .wexp-tooltip{
+  opacity:1;transform:translateX(-50%) translateY(0);
+}
+.wexp-tt-role{font-size:.7rem;font-weight:800;color:var(--txt);margin-bottom:.1rem;}
+.wexp-tt-place{font-size:.6rem;color:var(--teal);font-weight:600;}
+.wexp-tt-date{font-size:.56rem;color:var(--txt3);margin-top:.06rem;}
+
+/* ─── STATUS — square auto-fit tiles ─── */
 .statg{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  /* auto-fit: fills row, min 120px each; clamp to 2 on mobile via max */
+  grid-template-columns:repeat(auto-fill,minmax(max(120px,(100% - 4*.35rem)/5),1fr));
   gap:.35rem;
   margin-top:1.2rem;
+  justify-content:center;
 }
 .statc{
   position:relative;
@@ -296,16 +370,19 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
   align-items:center;justify-content:center;
   text-align:center;
   gap:.22rem;
-  padding:.7rem .5rem .6rem;
+  /* aspect-ratio keeps them square */
+  aspect-ratio:1/1;
+  padding:.6rem .4rem;
   background:rgba(255,255,255,.035);
   border:1px solid rgba(255,255,255,.08);
   border-radius:var(--r);
-  cursor:default;
+  cursor:pointer;
   overflow:hidden;
   transition:background .2s,border-color .2s,box-shadow .2s;
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   user-select:none;
+  -webkit-tap-highlight-color:transparent;
 }
 /* Color accent bar at top */
 .statc::after{
@@ -328,23 +405,26 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
   color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;
   position:relative;z-index:1;
 }
-/* Detail block — hidden by default, revealed on hover/tap */
+/* Value + note always visible */
+.statv{
+  font-family:'Sora',sans-serif;font-size:.68rem;font-weight:700;
+  color:var(--txt);line-height:1.3;margin-top:.08rem;
+  overflow-wrap:break-word;word-break:break-word;
+  position:relative;z-index:1;
+}
+.statn{font-size:.5rem;color:var(--txt3);line-height:1.3;margin-top:.05rem;position:relative;z-index:1;}
+/* Progress bar only — hidden until hover/tap */
 .stat-detail{
   width:100%;
   max-height:0;overflow:hidden;opacity:0;
-  transition:max-height .3s ease,opacity .25s;
+  transition:max-height .28s ease,opacity .22s;
   position:relative;z-index:1;
+  margin-top:.12rem;
 }
 .statc:hover .stat-detail,
 .statc.sx .stat-detail{
-  max-height:120px;opacity:1;
+  max-height:50px;opacity:1;
 }
-.statv{
-  font-family:'Sora',sans-serif;font-size:.72rem;font-weight:700;
-  color:var(--txt);line-height:1.3;margin-top:.1rem;
-  overflow-wrap:break-word;word-break:break-word;
-}
-.statn{font-size:.54rem;color:var(--txt3);line-height:1.35;margin-top:.08rem;}
 /* Progress bar */
 .stat-prog-wrap{margin-top:.3rem;}
 .stat-prog-label{display:flex;justify-content:space-between;margin-bottom:.1rem;}
@@ -353,19 +433,22 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .stat-prog-track{height:3px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;}
 .stat-prog-bar{height:100%;border-radius:99px;width:0;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);}
 
-/* ─── OTHER WEBSITES — fixed 2-col tile grid, hover reveals details ─── */
+/* ─── OTHER WEBSITES — square auto-fit tiles ─── */
 .oweb-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(auto-fill,minmax(max(120px,(100% - 4*.35rem)/5),1fr));
   gap:.35rem;
   margin-top:1.2rem;
+  justify-content:center;
 }
 .oweb-card{
   position:relative;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   text-align:center;gap:.2rem;
-  padding:.7rem .5rem .6rem;
+  /* square tiles */
+  aspect-ratio:1/1;
+  padding:.6rem .4rem;
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.07);
   border-radius:var(--r);
@@ -576,13 +659,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .csoc-row-arrow{font-size:.6rem;color:var(--txt3);transition:.2s;flex-shrink:0;}
 .csoc-row:hover .csoc-row-arrow{color:var(--teal);}
 
-/* ─── STATUS ─── */
-/* status — see compact block above */
-.staticon{width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.12rem;background:rgba(0,229,204,.07);border:1px solid rgba(0,229,204,.13);}
-.stati{flex:1;}
-.statlb{font-size:.6rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.14rem;}
-.statv{font-family:'Sora',sans-serif;font-size:.86rem;font-weight:700;color:var(--txt);margin-bottom:.09rem;}
-.statn{font-size:.6rem;color:var(--txt3);}
+/* status CSS — see compact tile block above */
 
 /* ─── CONTACT FORM ─── */
 .fg{margin-bottom:.78rem;}
@@ -762,7 +839,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .bb:hover{background:rgba(0,229,204,.1);}
 .api{max-width:1100px;margin:0 auto;padding:0 2rem 5rem;}
 
-@media(max-width:900px){.hdr-stats{display:none;}.wl{grid-template-columns:1fr!important;}.contact-grid{grid-template-columns:1fr!important;}}
+@media(max-width:900px){.hdr-stats{display:none;}.wl{grid-template-columns:1fr!important;}.contact-grid{grid-template-columns:1fr!important;}.wexp-chart{gap:.5rem;}}
 @media(max-width:768px){
   .hero-inner{grid-template-columns:1fr;gap:2.1rem;}
   #isc{max-width:330px;height:205px;margin:0 auto;}
@@ -783,6 +860,10 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
   .section{padding:3rem 1.1rem;}
   .tcg{grid-template-columns:repeat(3,1fr);gap:1rem;}
   #site-header{width:calc(100vw - 1.2rem);padding:0 .8rem;}
+  /* Force max 2 cols on mobile for status + oweb tiles */
+  .statg,.oweb-grid{grid-template-columns:1fr 1fr !important;}
+  .wexp-chart{gap:.4rem;height:180px;}
+  .wexp-axis{font-size:.5rem;}
 }
 </style>
 </head>
@@ -928,6 +1009,13 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
           <div class="wleg-grid" id="wleg-grid"></div>
         </div>
       </div>
+    </div></div>
+  </section>
+  <section class="section" id="workexp-section" style="display:none;">
+    <div class="sec-inner"><div class="gc">
+      <div class="slbl">// Career Timeline</div><h2 class="stitle">Work Experience</h2>
+      <p class="ssub">Click a bar to view role details.</p>
+      <div class="wexp-chart" id="wexp-wrap"></div>
     </div></div>
   </section>
   <section class="section" id="certificates-section" style="display:none;">
@@ -1118,6 +1206,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
       <div style="margin:.48rem 0 .2rem;padding:.18rem .62rem;font-size:.52rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.18em;">Sections</div>
       <div id="ssl-list"></div>
       <div style="margin:.48rem 0 .2rem;padding:.18rem .62rem;font-size:.52rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.18em;">More</div>
+      <div class="ani" onclick="showAS('workexp',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>Experience</div>
       <div class="ani" onclick="showAS('footer',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="18" x2="21" y2="18"/><line x1="3" y1="12" x2="15" y2="12"/></svg>Footer</div>
       <div class="ani" onclick="showAS('add-new',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add Section</div>
       <div class="ani" onclick="showAS('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
@@ -1199,6 +1288,12 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
         <div style="margin-bottom:.6rem;"><button class="btn btl sm" onclick="addWork()">+ Add</button></div>
         <div id="wal"></div>
         <div class="adc" style="margin-top:.6rem;"><div style="font-size:.6rem;font-weight:800;color:var(--txt3);margin-bottom:.22rem;text-transform:uppercase;">TOTAL</div><div style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;" id="wtd">0%</div></div>
+      </div>
+      <div class="ads" id="admin-workexp">
+        <div class="adst">Work Experience</div>
+        <p style="font-size:.8rem;color:var(--txt3);margin-bottom:.75rem;">Each bar width scales relative to the longest tenure.</p>
+        <div style="margin-bottom:.6rem;"><button class="btn btl sm" onclick="addWExp()">+ Add</button></div>
+        <div id="wexpl"></div>
       </div>
       <div class="ads" id="admin-certificates"><div class="adst">Certificates</div><div style="margin-bottom:.6rem;"><button class="btn btl sm" onclick="openCertMod()">+ Add</button></div><div id="certl"></div></div>
       <div class="ads" id="admin-mystatus"><div class="adst">My Status</div><div style="margin-bottom:.6rem;"><button class="btn btl sm" onclick="openStatMod()">+ Add</button></div><div id="statl"></div></div>
@@ -1446,6 +1541,11 @@ const S={
   otherwebs:[{id:'ow1',icon:'🏖️',title:'Visit Dinalungan',tag:'Tourism · Aurora',desc:'Collection of Hotels and transients in Dinalungan with their information.',url:'https://sites.google.com/view/visitdinalungan/home',color:'#00E5CC',image:''},{id:'ow2',icon:'💰',title:'Peso Tracker',tag:'Finance · Salary',desc:'My Salary Monitoring Platform.',url:'https://bonrosales.github.io/peso',color:'#10B981',image:''}],
   footerLegal:[{id:'fl1',label:'Privacy Policy',url:'#'},{id:'fl2',label:'Terms',url:'#'}],
   social:[{id:'gh',icon:'⌨',label:'GitHub',url:'https://bonrosales.github.io'}],
+  workexp:[
+    {id:'we1',role:'Computer Operator',place:'Provincial Government of Aurora',dateRange:'2024 – Present',years:1,color:'#00E5CC'},
+    {id:'we2',role:'IT Support Specialist',place:'LGU Dinalungan',dateRange:'2019 – 2023',years:4,color:'#1a6fff'},
+    {id:'we3',role:'Encoding Clerk',place:'LGU Dinalungan',dateRange:'2017 – 2019',years:2,color:'#F59E0B'},
+  ],
   games:[{id:'gm1',icon:'⚔️',name:'Honor of Kings',shortName:'HOK',gameId:'Enter ID',gameName:'Aivone',desc:'Strategy MOBA game.',color:'#FFD700'},{id:'gm2',icon:'🗡️',name:'Mobile Legends: Bang Bang',shortName:'MLBB',gameId:'Enter ID',gameName:'Aivone',desc:'5v5 MOBA battle.',color:'#0AABFF'},{id:'gm3',icon:'🎯',name:'PUBG Mobile',shortName:'PUBG',gameId:'Enter ID',gameName:'Aivone',desc:'Battle royale.',color:'#F2AA00'},{id:'gm4',icon:'🏰',name:'Clash of Clans',shortName:'CoC',gameId:'Enter Tag',gameName:'Aivone',desc:'Village building strategy.',color:'#0069AA'}],
   // Full social list for contact section
   contactSocials:[
@@ -1467,6 +1567,7 @@ const SECS=[
   {id:'posts',label:'Posts',type:'builtin',pid:'posts-section',svg:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>'},
   {id:'skills',label:'Skills',type:'builtin',pid:'skills-section',svg:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>'},
   {id:'works',label:'My Works',type:'builtin',pid:'works-section',svg:'<circle cx="12" cy="12" r="10"/>'},
+  {id:'workexp',label:'Experience',type:'builtin',pid:'workexp-section',svg:'<rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/>'},
   {id:'certificates',label:'Certificates',type:'builtin',pid:'certificates-section',svg:'<rect x="2" y="3" width="20" height="14" rx="2"/>'},
   {id:'mystatus',label:'My Status',type:'builtin',pid:'mystatus-section',svg:'<circle cx="12" cy="8" r="5"/>'},
   {id:'otherwebs',label:'My Websites',type:'builtin',pid:'otherwebs-section',svg:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>'},
@@ -1496,15 +1597,15 @@ function popJBAdmin(){const bi=document.getElementById('jb-binid');if(bi)bi.valu
 const DBK='aiv1_q51';let svTmr=null;
 function save(){clearTimeout(svTmr);svTmr=setTimeout(()=>{try{const data=getExp();localStorage.setItem(DBK,JSON.stringify(data));const e=document.getElementById('ass');if(e)e.textContent='✓ Saved locally at '+new Date().toLocaleTimeString();updDBS();mongoWrite(data);}catch(e){}},600);}
 function updDBS(){const e=document.getElementById('dbsd');if(!e)return;try{const r=localStorage.getItem(DBK);const sz=r?Math.round(r.length/1024*10)/10:0;const jbCfg=JSONBIN.binId?mongoOK?'ok':'err':'none';const jbTxt=JSONBIN.binId?(mongoOK?'● JSONBin Connected':'● JSONBin Offline'):'● JSONBin Not Configured';e.innerHTML=`<span style="color:var(--teal);font-weight:800;">✓ Saved Locally</span> · ${sz} KB<br><span style="font-size:.7rem;color:var(--txt3);">Last: ${new Date().toLocaleString()}</span><br><div id="mongo-status-el" class="mongo-status ${jbCfg==='none'?'err':jbCfg}" style="margin-top:.4rem;">${jbTxt}</div>`;}catch(e){}}
-function getExp(){return{version:'5.4',exported:new Date().toISOString(),hero:S.h,posts:S.posts,skills:S.skills,tools:S.tools,works:S.works,certs:S.certs,stats:S.stats,otherwebs:S.otherwebs,social:S.social,contactSocials:S.contactSocials,footerLegal:S.footerLegal,navVis:S.navVis,contactEmail:S.contactEmail,snd:S.snd,adminKey:S.adminKey,secOrder:SECS.map(s=>s.id),hidden:S.hidden,ftag:document.getElementById('ftag')?.textContent,fcp:document.getElementById('fcp')?.textContent,csecs:CST.sections,games:S.games};}
+function getExp(){return{version:'5.5',exported:new Date().toISOString(),hero:S.h,posts:S.posts,skills:S.skills,tools:S.tools,works:S.works,certs:S.certs,stats:S.stats,otherwebs:S.otherwebs,social:S.social,contactSocials:S.contactSocials,footerLegal:S.footerLegal,navVis:S.navVis,contactEmail:S.contactEmail,snd:S.snd,adminKey:S.adminKey,secOrder:SECS.map(s=>s.id),hidden:S.hidden,ftag:document.getElementById('ftag')?.textContent,fcp:document.getElementById('fcp')?.textContent,csecs:CST.sections,games:S.games,workexp:S.workexp};}
 function exportData(){const data=JSON.stringify(getExp(),null,2);const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='data.json';a.click();URL.revokeObjectURL(url);showToast('Exported data.json ✓','green');playClick('success');}
 function importData(inp){const file=inp.files[0];if(!file)return;const s=document.getElementById('impst');if(s){s.textContent='Reading…';s.style.color='var(--teal)';}const reader=new FileReader();reader.onload=e=>{try{const data=JSON.parse(e.target.result);loadData(data);localStorage.setItem(DBK,JSON.stringify(data));if(s){s.textContent='✓ Imported!';s.style.color='#10B981';}showToast('Imported ✓','green');playClick('success');rdrAll();}catch(err){if(s){s.textContent='✕ Invalid JSON.';s.style.color='var(--coral)';}showToast('Import failed','red');}};reader.readAsText(file);inp.value='';}
-function loadData(d){if(!d)return;if(d.hero)Object.assign(S.h,d.hero);if(d.posts)S.posts=d.posts;if(d.skills)S.skills=d.skills;if(d.tools)S.tools=d.tools;if(d.works)S.works=d.works;if(d.certs)S.certs=d.certs;if(d.stats)S.stats=d.stats;if(d.otherwebs)S.otherwebs=d.otherwebs;if(d.social)S.social=d.social;if(d.contactSocials)S.contactSocials=d.contactSocials;if(d.footerLegal)S.footerLegal=d.footerLegal;if(d.navVis)S.navVis=d.navVis;if(d.contactEmail)S.contactEmail=d.contactEmail;if(d.snd!==undefined)S.snd=d.snd;if(d.adminKey)S.adminKey=d.adminKey;if(d.hidden)S.hidden=d.hidden;if(d.games)S.games=d.games;if(d.ftag){const e=document.getElementById('ftag');if(e)e.textContent=d.ftag;}if(d.fcp)updFC(d.fcp);
+function loadData(d){if(!d)return;if(d.hero)Object.assign(S.h,d.hero);if(d.posts)S.posts=d.posts;if(d.skills)S.skills=d.skills;if(d.tools)S.tools=d.tools;if(d.works)S.works=d.works;if(d.certs)S.certs=d.certs;if(d.stats)S.stats=d.stats;if(d.otherwebs)S.otherwebs=d.otherwebs;if(d.social)S.social=d.social;if(d.contactSocials)S.contactSocials=d.contactSocials;if(d.footerLegal)S.footerLegal=d.footerLegal;if(d.navVis)S.navVis=d.navVis;if(d.contactEmail)S.contactEmail=d.contactEmail;if(d.snd!==undefined)S.snd=d.snd;if(d.adminKey)S.adminKey=d.adminKey;if(d.hidden)S.hidden=d.hidden;if(d.games)S.games=d.games;if(d.workexp)S.workexp=d.workexp;if(d.ftag){const e=document.getElementById('ftag');if(e)e.textContent=d.ftag;}if(d.fcp)updFC(d.fcp);
   if(d.secOrder&&Array.isArray(d.secOrder)){const no=[];d.secOrder.forEach(id=>{const f=SECS.find(s=>s.id===id);if(f)no.push(f);});SECS.forEach(s=>{if(!no.find(x=>x.id===s.id))no.push(s);});SECS.splice(0,SECS.length,...no);}
   if(d.csecs){d.csecs.forEach(sec=>{if(!CST.sections.find(s=>s.id===sec.id)){CST.sections.push(sec);if(!SECS.find(s=>s.id===sec.id))SECS.push({id:sec.id,label:sec.title,type:'custom',pid:'msec-'+sec.id,svg:'<rect x="3" y="3" width="18" height="18" rx="2"/>',hidden:false});}});}}
 function loadSaved(){try{const r=localStorage.getItem(DBK);if(r)loadData(JSON.parse(r));}catch(e){}}
 async function loadDJ(){try{const r=await fetch('data.json?_='+Date.now());if(!r.ok)return false;loadData(await r.json());return true;}catch(e){return false;}}
-function rdrAll(){updCard();updIntro();rdrPosts();rdrSKBars();rdrTools();rdrWorks();rdrCerts();rdrStats();rdrOtherWebs();rdrGaming();rdrFSoc();rdrFL();rdrNav();updStats();rdrPO();rdrSS();rdrSOP();rdrContactSocials();rdrCSocAdmin();}
+function rdrAll(){updCard();updIntro();rdrPosts();rdrSKBars();rdrTools();rdrWorks();rdrWorkExp();rdrCerts();rdrStats();rdrOtherWebs();rdrGaming();rdrFSoc();rdrFL();rdrNav();updStats();rdrPO();rdrSS();rdrSOP();rdrContactSocials();rdrCSocAdmin();}
 
 /* ══ NAV ══ */
 function getAllS(){const r=[{id:'home',label:'Home',action:'home'}];SECS.forEach(s=>{if(iHid(s.id))return;if(s.type==='custom'){const sec=CST.sections.find(x=>x.id===s.id);if(sec)r.push({id:s.id,label:sec.title,action:'msec-'+s.id});}else r.push({id:s.id,label:s.label,action:s.pid});});return r;}
@@ -1671,6 +1772,25 @@ function rdrWorks(){
   canvas.onclick=e=>{const i=getAt(e.clientX,e.clientY);if(i>=0){wAct=wAct===i?-1:i;draw(hov);setCenter(wAct);rdrLeg();}};
   new IntersectionObserver(en=>{if(!en[0].isIntersecting)return;draw(-1);setCenter(-1);rdrLeg();},{threshold:.3}).observe(canvas);
 }
+function rdrWExpA(){
+  const list=document.getElementById('wexpl');if(!list)return;list.innerHTML='';
+  (S.workexp||[]).forEach((e,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rs);padding:.65rem;margin-bottom:.4rem;';
+    row.innerHTML=`<div style="display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;margin-bottom:.3rem;">
+      <input class="fi" style="flex:2;min-width:100px;" value="${e.role||''}" placeholder="Role/Title" oninput="S.workexp[${i}].role=this.value;rdrWorkExp();save()">
+      <input class="fi" style="width:56px;" type="number" min="0" max="50" value="${e.years||1}" placeholder="Yrs" oninput="S.workexp[${i}].years=+this.value;rdrWorkExp();save()">
+      <input type="color" value="${e.color||'#00E5CC'}" style="width:30px;height:28px;padding:2px;border:1px solid rgba(255,255,255,.1);cursor:pointer;" oninput="S.workexp[${i}].color=this.value;rdrWorkExp();save()">
+      <button class="ab danger" onclick="conf(()=>delWExp('${e.id}'),'Delete?')">✕</button>
+    </div>
+    <input class="fi" style="width:100%;margin-bottom:.3rem;" value="${e.place||''}" placeholder="Company/Place" oninput="S.workexp[${i}].place=this.value;rdrWorkExp();save()">
+    <input class="fi" style="width:100%;" value="${e.dateRange||''}" placeholder="Date range e.g. 2020 – 2024" oninput="S.workexp[${i}].dateRange=this.value;rdrWorkExp();save()">`;
+    list.appendChild(row);
+  });
+}
+function addWExp(){if(!S.workexp)S.workexp=[];S.workexp.push({id:'we-'+Date.now(),role:'New Role',place:'Company',dateRange:'2024 – Present',years:1,color:'#00E5CC'});rdrWorkExp();rdrWExpA();save();}
+function delWExp(id){S.workexp=S.workexp.filter(e=>e.id!==id);rdrWorkExp();rdrWExpA();save();}
+
 function rdrWA(){const list=document.getElementById('wal');if(!list)return;list.innerHTML='';S.works.forEach((w,i)=>{const row=document.createElement('div');row.style.cssText='display:flex;align-items:flex-start;gap:.33rem;margin-bottom:.52rem;padding:.62rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);flex-wrap:wrap;';row.innerHTML=`<div style="display:flex;flex-direction:column;gap:.18rem;flex:1;min-width:200px;"><div style="display:flex;gap:.33rem;align-items:center;"><button class="ab" onclick="movWork(${i},-1)">↑</button><button class="ab" onclick="movWork(${i},1)">↓</button><input class="fi" style="flex:1;" value="${w.name}" oninput="S.works.find(x=>x.id==='${w.id}').name=this.value;rdrWorks();updWT();save()"><input class="fi" style="width:56px;" type="number" min="0" max="100" value="${w.pct}" oninput="S.works.find(x=>x.id==='${w.id}').pct=+this.value;rdrWorks();updWT();save()"><input type="color" value="${w.color}" style="width:30px;height:28px;padding:2px;border:1px solid rgba(255,255,255,.1);cursor:pointer;" oninput="S.works.find(x=>x.id==='${w.id}').color=this.value;rdrWorks();save()"><button class="ab danger" onclick="conf(()=>delWork('${w.id}'),'Delete?')">✕</button></div><textarea class="fi" rows="2" placeholder="Description..." oninput="S.works.find(x=>x.id==='${w.id}').description=this.value;rdrWorks();save()">${w.description||''}</textarea></div>`;list.appendChild(row);});updWT();}
 function updWT(){const e=document.getElementById('wtd');if(!e)return;const t=S.works.reduce((a,w)=>a+w.pct,0);e.textContent=t+'%';e.style.color=t===100?'#10B981':t>100?'var(--coral)':'#F59E0B';}
 function addWork(){S.works.push({id:'w-'+Date.now(),name:'New Work',pct:5,color:'#6B7280',description:''});rdrWorks();rdrWA();save();}
@@ -1695,6 +1815,7 @@ function rdrStats(){
     card.className='statc';
     card.style.setProperty('--sc',col);
 
+    // Progress bar only — goes in the hover-reveal detail block
     let progHTML='';
     if(hasPct){
       progHTML=`<div class="stat-prog-wrap">
@@ -1706,14 +1827,13 @@ function rdrStats(){
       </div>`;
     }
 
+    // icon + label + value + note always shown; progress hidden until hover/tap
     card.innerHTML=`
       <div class="staticon">${s.icon}</div>
       <div class="statlb">${s.label}</div>
-      <div class="stat-detail">
-        <div class="statv">${s.value}</div>
-        ${s.note?`<div class="statn">${s.note}</div>`:''}
-        ${progHTML}
-      </div>`;
+      <div class="statv">${s.value}</div>
+      ${s.note?`<div class="statn">${s.note}</div>`:''}
+      ${hasPct?`<div class="stat-detail">${progHTML}</div>`:''}`;
 
     // Touch toggle
     card.addEventListener('click',()=>{
@@ -1806,6 +1926,45 @@ function rdrFSoc(){
     a.innerHTML=`${gh.icon} ${gh.label}`;
     c.appendChild(a);
   }
+}
+
+/* ══ WORK EXPERIENCE ══ */
+function rdrWorkExp(){
+  const wrap=document.getElementById('wexp-wrap');if(!wrap)return;wrap.innerHTML='';
+  const exps=S.workexp||[];
+  if(!exps.length){wrap.innerHTML='<p style="color:var(--txt3);text-align:center;padding:2rem;">No experience added yet.</p>';return;}
+  const maxYrs=Math.max(...exps.map(e=>e.years||1));
+  const chartH=180; // px height for 100%
+  exps.forEach(e=>{
+    const pct=Math.round(((e.years||1)/maxYrs)*100);
+    const targetH=Math.round((pct/100)*chartH);
+    const col=document.createElement('div');
+    col.className='wexp-col';
+    col.innerHTML=`
+      <div class="wexp-bar-wrap">
+        <div class="wexp-bar" id="wbar-${e.id}" style="background:linear-gradient(to top,${e.color||'var(--teal)'},${e.color||'var(--teal)'}88);height:0;width:100%;">
+          <div class="wexp-bar-label">${e.years}yr${e.years!==1?'s':''}</div>
+        </div>
+      </div>
+      <div class="wexp-axis">${(e.role||'').split(' ').slice(0,2).join(' ')}</div>
+      <div class="wexp-tooltip">
+        <div class="wexp-tt-role">${e.role||''}</div>
+        <div class="wexp-tt-place">${e.place||''}</div>
+        <div class="wexp-tt-date">${e.dateRange||''}</div>
+      </div>`;
+    // tap toggle for mobile
+    col.addEventListener('click',()=>{
+      const was=col.classList.contains('wx');
+      wrap.querySelectorAll('.wexp-col.wx').forEach(c=>c.classList.remove('wx'));
+      if(!was)col.classList.add('wx');
+    });
+    wrap.appendChild(col);
+    // animate on scroll
+    new IntersectionObserver(en=>{
+      if(!en[0].isIntersecting)return;
+      document.getElementById('wbar-'+e.id).style.height=targetH+'px';
+    },{threshold:.3}).observe(col);
+  });
 }
 
 /* ══ GAMING ══ */
@@ -1915,7 +2074,7 @@ function addNSave(){const te=document.getElementById('ant');const le=document.ge
 /* ══ ADMIN ══ */
 function openAdm(){if(S.isAdmin){openAdmPanel();return;}const ki=document.getElementById('akin');if(ki)ki.value='';const ke=document.getElementById('akerr');if(ke)ke.style.display='none';om('m-login');setTimeout(()=>document.getElementById('akin')?.focus(),80);}
 function verAdmin(){const ki=document.getElementById('akin');if(!ki)return;if(ki.value===S.adminKey){S.isAdmin=true;cm2('m-login');openAdmPanel();playClick('success');}else{const ke=document.getElementById('akerr');if(ke)ke.style.display='block';ki.value='';playClick('error');}}
-function openAdmPanel(){document.getElementById('admp')?.classList.add('open');document.body.classList.add('is-admin');document.getElementById('heb').style.display='flex';rdrAP();rdrANL();updStats();rdrSKAdmin();rdrFL();rdrCertA();rdrStatA();rdrWA();rdrOWebA();rdrGamingA();rdrCSocAdmin();popHeroAdmin();const ces=document.getElementById('ces');if(ces)ces.value=S.contactEmail||'';const ft=document.getElementById('aft');if(ft)ft.value=document.getElementById('ftag')?.textContent||'';const fc=document.getElementById('afc');if(fc)fc.value=document.getElementById('fcp')?.textContent||'';rdrSS();rdrSOP();initAN();rdrPO();rdrNav();updDBS();popJBAdmin();showAS('dashboard');}
+function openAdmPanel(){document.getElementById('admp')?.classList.add('open');document.body.classList.add('is-admin');document.getElementById('heb').style.display='flex';rdrAP();rdrANL();updStats();rdrSKAdmin();rdrFL();rdrCertA();rdrStatA();rdrWA();rdrOWebA();rdrGamingA();rdrCSocAdmin();rdrWExpA();popHeroAdmin();const ces=document.getElementById('ces');if(ces)ces.value=S.contactEmail||'';const ft=document.getElementById('aft');if(ft)ft.value=document.getElementById('ftag')?.textContent||'';const fc=document.getElementById('afc');if(fc)fc.value=document.getElementById('fcp')?.textContent||'';rdrSS();rdrSOP();initAN();rdrPO();rdrNav();updDBS();popJBAdmin();showAS('dashboard');}
 function logoutAdmin(){S.isAdmin=false;document.getElementById('admp')?.classList.remove('open');document.body.classList.remove('is-admin');document.getElementById('heb').style.display='none';showToast('Logged out');}
 function toggleMSB(){const sb=document.getElementById('adsb');const bd=document.getElementById('adsbb');if(sb){sb.classList.toggle('mob-open');if(bd)bd.classList.toggle('show');}}
 function closeMSB(){const sb=document.getElementById('adsb');const bd=document.getElementById('adsbb');if(sb){sb.classList.remove('mob-open');if(bd)bd.classList.remove('show');}}
@@ -1946,7 +2105,7 @@ async function init(){
   rdrPO();rdrSS();rdrSOP();rdrNav();
   rdrPosts();rdrFSoc();rdrFL();
   rdrSKBars();rdrTools();rdrWorks();
-  rdrCerts();rdrStats();rdrOtherWebs();rdrGaming();
+  rdrCerts();rdrStats();rdrOtherWebs();rdrGaming();rdrWorkExp();
   initAN();updCard();updIntro();updStats();
   rdrContactSocials();
   setTimeout(()=>{document.querySelectorAll('.section').forEach(el=>sObs.observe(el));},120);
