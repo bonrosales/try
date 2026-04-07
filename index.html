@@ -283,63 +283,141 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 /* Keep wdet-col for backwards compat but unused now */
 .wdet-col{display:none;}
 
-/* ─── STATUS — compact 2-col grid ─── */
-.statg{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;margin-top:1.2rem;}
+/* ─── STATUS — fixed 2-col tile grid, hover reveals details ─── */
+.statg{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.35rem;
+  margin-top:1.2rem;
+}
 .statc{
-  display:flex;align-items:center;gap:.5rem;
-  padding:.42rem .6rem;
+  position:relative;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  gap:.22rem;
+  padding:.7rem .5rem .6rem;
   background:rgba(255,255,255,.035);
   border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--rs);
-  transition:.2s;
-  backdrop-filter:blur(12px);
+  border-radius:var(--r);
+  cursor:default;
   overflow:hidden;
+  transition:background .2s,border-color .2s,box-shadow .2s;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  user-select:none;
 }
-.statc:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.13);}
+/* Color accent bar at top */
+.statc::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--sc,var(--teal));opacity:.7;
+}
+.statc:hover,.statc.sx{
+  background:rgba(5,13,20,.75);
+  border-color:var(--sc,rgba(0,229,204,.35));
+  box-shadow:0 6px 20px rgba(0,0,0,.3);
+}
+/* Icon */
 .staticon{
-  width:30px;height:30px;border-radius:7px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.95rem;
-  background:rgba(0,229,204,.07);border:1px solid rgba(0,229,204,.13);
+  font-size:1.4rem;line-height:1;
+  position:relative;z-index:1;
 }
-.stati{flex:1;min-width:0;}
-.statlb{font-size:.52rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;}
-.statv{font-family:'Sora',sans-serif;font-size:.72rem;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.statn{font-size:.52rem;color:var(--txt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-/* Progress bar inline under value */
-.stat-prog-wrap{margin-top:.25rem;}
-.stat-prog-label{display:flex;justify-content:space-between;margin-bottom:.12rem;}
-.stat-prog-name{font-size:.48rem;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
-.stat-prog-val{font-size:.5rem;font-weight:800;}
+/* Label always visible */
+.statlb{
+  font-size:.55rem;font-weight:800;
+  color:var(--txt3);text-transform:uppercase;letter-spacing:.08em;
+  position:relative;z-index:1;
+}
+/* Detail block — hidden by default, revealed on hover/tap */
+.stat-detail{
+  width:100%;
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .3s ease,opacity .25s;
+  position:relative;z-index:1;
+}
+.statc:hover .stat-detail,
+.statc.sx .stat-detail{
+  max-height:120px;opacity:1;
+}
+.statv{
+  font-family:'Sora',sans-serif;font-size:.72rem;font-weight:700;
+  color:var(--txt);line-height:1.3;margin-top:.1rem;
+  overflow-wrap:break-word;word-break:break-word;
+}
+.statn{font-size:.54rem;color:var(--txt3);line-height:1.35;margin-top:.08rem;}
+/* Progress bar */
+.stat-prog-wrap{margin-top:.3rem;}
+.stat-prog-label{display:flex;justify-content:space-between;margin-bottom:.1rem;}
+.stat-prog-name{font-size:.46rem;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+.stat-prog-val{font-size:.48rem;font-weight:800;}
 .stat-prog-track{height:3px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;}
 .stat-prog-bar{height:100%;border-radius:99px;width:0;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);}
 
-/* ─── OTHER WEBSITES — compact 2-col row grid ─── */
-.oweb-grid{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;margin-top:1.2rem;}
+/* ─── OTHER WEBSITES — fixed 2-col tile grid, hover reveals details ─── */
+.oweb-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.35rem;
+  margin-top:1.2rem;
+}
 .oweb-card{
   position:relative;
-  display:flex;align-items:center;gap:.55rem;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;gap:.2rem;
+  padding:.7rem .5rem .6rem;
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--rs);
-  padding:.45rem .6rem;
+  border-radius:var(--r);
   cursor:pointer;text-decoration:none;
-  overflow:hidden;transition:.22s;
+  overflow:hidden;
+  transition:background .2s,border-color .2s,box-shadow .2s;
   backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
 }
-.oweb-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,204,.04),transparent);opacity:0;transition:.2s;}
-.oweb-card:hover{border-color:rgba(0,229,204,.28);background:rgba(0,229,204,.05);transform:none;}
-.oweb-card:hover::before{opacity:1;}
-.oweb-card-icon{font-size:1.4rem;flex-shrink:0;position:relative;z-index:1;}
-.oweb-card-body{flex:1;min-width:0;position:relative;z-index:1;}
-.oweb-card-title{font-family:'Sora',sans-serif;font-size:.72rem;font-weight:800;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.oweb-card-tag{font-size:.52rem;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;}
-.oweb-card-desc{font-size:.6rem;color:var(--txt3);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:none;}
-.oweb-card:hover .oweb-card-desc{display:block;}
-.oweb-card-arrow{font-size:.65rem;color:var(--txt3);transition:.2s;flex-shrink:0;position:relative;z-index:1;}
-.oweb-card:hover .oweb-card-arrow{color:var(--teal);}
-/* Remove old unused oweb classes */
-.oweb-card-stripe,.oweb-card-img,.oweb-card-embed{display:none;}
+.oweb-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--teal);opacity:0;transition:opacity .2s;
+}
+.oweb-card:hover,.oweb-card.ox{
+  background:rgba(5,13,20,.75);
+  border-color:rgba(0,229,204,.32);
+  box-shadow:0 6px 20px rgba(0,0,0,.3);
+}
+.oweb-card:hover::after,.oweb-card.ox::after{opacity:.8;}
+/* Icon always visible */
+.oweb-card-icon{font-size:1.6rem;line-height:1;position:relative;z-index:1;}
+/* Title always visible */
+.oweb-card-title{
+  font-family:'Sora',sans-serif;font-size:.68rem;font-weight:800;
+  color:var(--txt);position:relative;z-index:1;
+  overflow-wrap:break-word;word-break:break-word;line-height:1.3;
+}
+/* Detail block — hidden until hover/tap */
+.oweb-card-detail{
+  width:100%;
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .3s ease,opacity .25s;
+  position:relative;z-index:1;
+}
+.oweb-card:hover .oweb-card-detail,
+.oweb-card.ox .oweb-card-detail{
+  max-height:80px;opacity:1;
+}
+.oweb-card-tag{
+  font-size:.52rem;font-weight:700;color:var(--teal);
+  letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem;
+}
+.oweb-card-desc{
+  font-size:.58rem;color:var(--txt3);line-height:1.45;
+  margin-top:.1rem;overflow-wrap:break-word;
+}
+.oweb-card-arrow{display:none;}
+/* Kill legacy classes */
+.oweb-card-stripe,.oweb-card-img,.oweb-card-embed,
+.oweb-card-body{display:none;}
 .cert-marquee-wrap{overflow:hidden;width:100%;margin-top:1.5rem;position:relative;}
 .cert-marquee-wrap::before,.cert-marquee-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;}
 .cert-marquee-wrap::before{left:0;background:linear-gradient(90deg,rgba(5,13,20,.95),transparent);}
@@ -356,28 +434,10 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .certm .certo{position:absolute;inset:0;background:rgba(5,13,20,.92);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.1rem;opacity:0;transition:opacity .3s;text-align:center;}
 .certm:hover .certo{opacity:1;}
 
-/* ─── STATUS PROGRESS ─── */
-.stat-prog-wrap{margin-top:.55rem;}
-.stat-prog-label{display:flex;justify-content:space-between;margin-bottom:.22rem;}
-.stat-prog-name{font-size:.54rem;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
-.stat-prog-val{font-size:.54rem;font-weight:800;}
-.stat-prog-track{height:4px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;}
-.stat-prog-bar{height:100%;border-radius:99px;width:0;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);}
+/* stat-prog — see compact block above */
 
 /* ─── OTHER WEBSITES ─── */
-.oweb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:1.5rem;}
-.oweb-card{position:relative;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--rl);padding:1.5rem;cursor:pointer;text-decoration:none;display:block;overflow:hidden;transition:.3s;backdrop-filter:blur(12px);}
-.oweb-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,204,.04),transparent);opacity:0;transition:.3s;}
-.oweb-card:hover{border-color:rgba(0,229,204,.3);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.35),0 0 0 1px rgba(0,229,204,.1);}
-.oweb-card:hover::before{opacity:1;}
-.oweb-card-icon{font-size:2rem;margin-bottom:.75rem;}
-.oweb-card-title{font-family:'Sora',sans-serif;font-size:1rem;font-weight:800;color:var(--txt);margin-bottom:.25rem;letter-spacing:-.02em;}
-.oweb-card-tag{font-size:.56rem;font-weight:800;color:var(--teal);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.55rem;}
-.oweb-card-desc{font-size:.76rem;color:var(--txt3);line-height:1.65;}
-.oweb-card-arrow{position:absolute;top:1.1rem;right:1.1rem;width:28px;height:28px;border-radius:50%;background:rgba(0,229,204,.08);border:1px solid rgba(0,229,204,.18);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--teal);transition:.3s;}
-.oweb-card:hover .oweb-card-arrow{background:var(--teal);color:var(--dk);transform:translate(2px,-2px);}
-.oweb-card-stripe{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),transparent);opacity:0;transition:.3s;}
-.oweb-card:hover .oweb-card-stripe{opacity:1;}
+/* oweb — see compact block above */
 
 /* ─── MONGO STATUS ─── */
 .mongo-status{display:inline-flex;align-items:center;gap:.3rem;font-size:.58rem;font-weight:800;padding:.14rem .44rem;border-radius:99px;letter-spacing:.06em;}
@@ -517,9 +577,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .csoc-row:hover .csoc-row-arrow{color:var(--teal);}
 
 /* ─── STATUS ─── */
-.statg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.85rem;margin-top:1.5rem;}
-.statc{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:1.15rem;transition:.25s;display:flex;align-items:flex-start;gap:.68rem;backdrop-filter:blur(12px);}
-.statc:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.13);transform:translateY(-2px);}
+/* status — see compact block above */
 .staticon{width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.12rem;background:rgba(0,229,204,.07);border:1px solid rgba(0,229,204,.13);}
 .stati{flex:1;}
 .statlb{font-size:.6rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.14rem;}
@@ -1628,7 +1686,54 @@ function openCertMod(id){S.editCertId=id||null;const c=id?S.certs.find(x=>x.id==
 function saveCert(){const name=(document.getElementById('ci-n')||{value:''}).value.trim();if(!name){showToast('Name required','red');return;}const cert={name,issuer:(document.getElementById('ci-i')||{value:''}).value.trim(),date:(document.getElementById('ci-d')||{value:''}).value.trim(),image:(document.getElementById('ci-img')||{value:''}).value.trim(),description:(document.getElementById('ci-dc')||{value:''}).value.trim()};if(S.editCertId){const c=S.certs.find(x=>x.id===S.editCertId);if(c)Object.assign(c,cert);}else S.certs.push({id:'c-'+Date.now(),...cert});cm2('m-cert');rdrCerts();rdrCertA();showToast('Saved ✓');playClick('success');save();}
 
 /* ══ STATUS ══ */
-function rdrStats(){const grid=document.getElementById('status-grid');if(!grid)return;grid.innerHTML='';S.stats.forEach(s=>{const col=s.pctColor||(s.color||'var(--teal)');const hasPct=s.pct>0;const card=document.createElement('div');card.className='statc';let progHTML='';if(hasPct){progHTML=`<div class="stat-prog-wrap"><div class="stat-prog-label"><span class="stat-prog-name">Proficiency</span><span class="stat-prog-val" style="color:${col};">${s.pct}%</span></div><div class="stat-prog-track"><div class="stat-prog-bar" data-pct="${s.pct}" style="background:${col};"></div></div></div>`;}card.innerHTML=`<div class="staticon" style="background:${col}18;border-color:${col}30;">${s.icon}</div><div class="stati"><div class="statlb">${s.label}</div><div class="statv">${s.value}</div>${s.note?`<div class="statn">${s.note}</div>`:''}${progHTML}</div>`;grid.appendChild(card);if(hasPct){const bar=card.querySelector('.stat-prog-bar');new IntersectionObserver(en=>{if(!en[0].isIntersecting)return;bar.style.width=s.pct+'%';},{threshold:.4}).observe(card);}});st('dash-status',String(S.stats.length));}
+function rdrStats(){
+  const grid=document.getElementById('status-grid');if(!grid)return;grid.innerHTML='';
+  S.stats.forEach(s=>{
+    const col=s.pctColor||s.color||'var(--teal)';
+    const hasPct=s.pct>0;
+    const card=document.createElement('div');
+    card.className='statc';
+    card.style.setProperty('--sc',col);
+
+    let progHTML='';
+    if(hasPct){
+      progHTML=`<div class="stat-prog-wrap">
+        <div class="stat-prog-label">
+          <span class="stat-prog-name">Progress</span>
+          <span class="stat-prog-val" style="color:${col};">${s.pct}%</span>
+        </div>
+        <div class="stat-prog-track"><div class="stat-prog-bar" style="background:${col};"></div></div>
+      </div>`;
+    }
+
+    card.innerHTML=`
+      <div class="staticon">${s.icon}</div>
+      <div class="statlb">${s.label}</div>
+      <div class="stat-detail">
+        <div class="statv">${s.value}</div>
+        ${s.note?`<div class="statn">${s.note}</div>`:''}
+        ${progHTML}
+      </div>`;
+
+    // Touch toggle
+    card.addEventListener('click',()=>{
+      const was=card.classList.contains('sx');
+      grid.querySelectorAll('.statc.sx').forEach(c=>c.classList.remove('sx'));
+      if(!was)card.classList.add('sx');
+    });
+
+    grid.appendChild(card);
+
+    if(hasPct){
+      const bar=card.querySelector('.stat-prog-bar');
+      new IntersectionObserver(en=>{
+        if(!en[0].isIntersecting)return;
+        bar.style.width=s.pct+'%';
+      },{threshold:.4}).observe(card);
+    }
+  });
+  st('dash-status',String(S.stats.length));
+}
 function rdrStatA(){const list=document.getElementById('statl');if(!list)return;list.innerHTML='';S.stats.forEach((s,i)=>{const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:.36rem;margin-bottom:.35rem;padding:.46rem .65rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rs);flex-wrap:wrap;';row.innerHTML=`<span>${s.icon}</span><div style="flex:1;min-width:82px;"><div style="font-size:.8rem;font-weight:700;color:var(--txt);">${s.label}</div><div style="font-size:.64rem;color:var(--txt3);">${s.value}</div></div><div style="display:flex;gap:.16rem;"><button class="ab" onclick="movStat(${i},-1)">↑</button><button class="ab" onclick="movStat(${i},1)">↓</button><button class="ab" onclick="openStatMod('${s.id}')">Edit</button><button class="ab danger" onclick="conf(()=>delStat('${s.id}'),'Delete?')">Del</button></div>`;list.appendChild(row);});}
 function movStat(i,dir){const a=[...S.stats];const t=i+dir;if(t<0||t>=a.length)return;[a[i],a[t]]=[a[t],a[i]];S.stats=a;rdrStats();rdrStatA();save();}
 function delStat(id){S.stats=S.stats.filter(s=>s.id!==id);rdrStats();rdrStatA();save();}
@@ -1640,9 +1745,21 @@ function rdrOtherWebs(){
   const grid=document.getElementById('oweb-grid');if(!grid)return;grid.innerHTML='';
   if(!S.otherwebs||!S.otherwebs.length){grid.innerHTML='<p style="color:var(--txt3);">No sites added yet.</p>';return;}
   S.otherwebs.forEach(w=>{
-    const a=document.createElement('a');a.className='oweb-card';
-    a.href=w.url||'#';if(w.url&&w.url!=='#')a.target='_blank';a.rel='noopener noreferrer';
-    a.innerHTML=`<div class="oweb-card-icon">${w.icon||'🌐'}</div><div class="oweb-card-body"><div class="oweb-card-title">${w.title}</div><div class="oweb-card-tag">${w.tag||''}</div><div class="oweb-card-desc">${w.desc||''}</div></div><div class="oweb-card-arrow">↗</div>`;
+    const a=document.createElement('a');
+    a.className='oweb-card';
+    a.href=w.url||'#';
+    if(w.url&&w.url!=='#')a.target='_blank';
+    a.rel='noopener noreferrer';
+    a.innerHTML=`<div class="oweb-card-icon">${w.icon||'\u{1F310}'}</div><div class="oweb-card-title">${w.title}</div><div class="oweb-card-detail"><div class="oweb-card-tag">${w.tag||''}</div>${w.desc?`<div class="oweb-card-desc">${w.desc}</div>`:''}</div>`;
+    // Touch: first tap reveals detail, second tap follows link
+    let tapped=false;
+    a.addEventListener('touchend',e=>{
+      if(!a.classList.contains('ox')){
+        e.preventDefault();
+        grid.querySelectorAll('.oweb-card.ox').forEach(c=>c.classList.remove('ox'));
+        a.classList.add('ox');
+      }
+    },{passive:false});
     grid.appendChild(a);
   });
 }
