@@ -55,9 +55,24 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:440px 1fr;gap:4rem;align-items:center;width:100%;}
 
 
-/* ── HERO ── */
-#hero{position:relative;z-index:1;padding:4.5rem 2rem 2rem;}
-.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+/* ── HERO — 2 rows: info + gallery ── */
+#hero{
+  position:relative;z-index:1;
+  padding:4.5rem 2rem 0;
+  display:flex;flex-direction:column;
+  gap:0;
+}
+/* Row 1: info (left) + stats (right) — 2 cols */
+.hero-inner{
+  max-width:1100px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem;
+  align-items:center;
+  width:100%;
+  padding-bottom:2.5rem;
+}
 .hero-intro{color:var(--txt);}
 .h-role{font-size:.82rem;font-weight:700;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.55rem;}
 .h-name{font-family:'Sora',sans-serif;font-size:clamp(2rem,3.8vw,3.2rem);font-weight:800;line-height:1.05;letter-spacing:-.04em;margin-bottom:1.1rem;}
@@ -66,7 +81,7 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 .h-addr-row{display:flex;flex-direction:column;gap:.1rem;padding:.5rem .7rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:var(--rs);}
 .h-addr-lbl{font-size:.56rem;font-weight:800;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;}
 .h-addr-val{font-size:.8rem;color:var(--txt2);line-height:1.5;}
-/* Hero right col */
+/* Hero right col — stats */
 .hero-side{display:flex;flex-direction:column;gap:1.2rem;}
 .h-side-tag{font-size:.6rem;font-weight:800;color:var(--teal);letter-spacing:.18em;text-transform:uppercase;}
 .h-side-sub{font-size:.86rem;color:var(--txt2);line-height:1.65;}
@@ -74,76 +89,89 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 .h-side-stat{text-align:center;padding:.6rem .3rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--rs);}
 .h-side-val{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;color:var(--teal);line-height:1;}
 .h-side-lbl{font-size:.52rem;color:var(--txt3);font-weight:600;margin-top:.18rem;text-transform:uppercase;letter-spacing:.06em;}
-
-/* ── HERO PHOTO GALLERY — horizontal with phone-frame cards ── */
-/* Gallery lives BELOW the 2-col hero on desktop, full-width */
-.hero-gallery-strip{
-  max-width:1100px;
-  margin:2.5rem auto 0;
-  position:relative;
+/* Row 2: full-width gallery strip — goes edge-to-edge */
+.hero-gallery-row{
+  width:100%;
   overflow:hidden;
+  position:relative;
+  padding-bottom:2.5rem;
 }
-/* Fade edges */
-.hero-gallery-strip::before,
-.hero-gallery-strip::after{
-  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
-}
-.hero-gallery-strip::before{left:0;background:linear-gradient(90deg,var(--dk) 0%,transparent 100%);}
-.hero-gallery-strip::after{right:0;background:linear-gradient(270deg,var(--dk) 0%,transparent 100%);}
 
-/* The scrolling track */
+/* ── HERO PHOTO GALLERY — horizontal phone-frame strip ── */
+/* Edge fades */
+.hero-gallery-row::before,
+.hero-gallery-row::after{
+  content:'';position:absolute;top:0;bottom:0;width:100px;z-index:3;pointer-events:none;
+}
+.hero-gallery-row::before{left:0;background:linear-gradient(90deg,var(--dk) 0%,transparent 100%);}
+.hero-gallery-row::after{right:0;background:linear-gradient(270deg,var(--dk) 0%,transparent 100%);}
+
+/* Scrolling track — items bottom-aligned so taller center frame rises up */
 .hgal-track{
   display:flex;
+  align-items:flex-end;
   gap:1rem;
-  padding:.5rem 0 1rem;
+  padding:1rem 100px .5rem;
   overflow-x:auto;
-  scroll-behavior:smooth;
   scrollbar-width:none;
-  /* momentum scrolling on iOS */
   -webkit-overflow-scrolling:touch;
   cursor:grab;
+  /* don't show overflow clipping */
+  overflow-y:visible;
 }
 .hgal-track:active{cursor:grabbing;}
 .hgal-track::-webkit-scrollbar{display:none;}
 
-/* Phone-frame card */
+/* Base phone-frame card — slightly tilted sides */
 .hgal-frame{
   flex-shrink:0;
-  width:160px;
-  height:260px;
-  border-radius:22px;
-  border:2px solid rgba(255,255,255,.18);
+  /* width is a fraction of viewport, clamped */
+  width:clamp(120px,15vw,175px);
+  height:clamp(195px,24vw,285px);
+  border-radius:24px;
+  border:1.5px solid rgba(255,255,255,.16);
   overflow:hidden;
   position:relative;
-  background:rgba(255,255,255,.05);
-  box-shadow:0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12);
-  transition:transform .35s cubic-bezier(.25,.46,.45,.94),box-shadow .35s;
+  background:rgba(255,255,255,.04);
+  box-shadow:0 14px 36px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1);
+  transition:transform .4s cubic-bezier(.25,.46,.45,.94),
+             box-shadow .4s,border-color .3s;
+  transform-origin:bottom center;
 }
+/* Side frames tilt inward slightly */
+.hgal-frame.hgal-side-l{transform:rotate(-3deg) translateY(8px);}
+.hgal-frame.hgal-side-r{transform:rotate(3deg) translateY(8px);}
+.hgal-frame.hgal-side-l2{transform:rotate(-5deg) translateY(16px);}
+.hgal-frame.hgal-side-r2{transform:rotate(5deg) translateY(16px);}
+
+/* Hover lifts any frame */
 .hgal-frame:hover{
-  transform:translateY(-8px) scale(1.03);
-  box-shadow:0 22px 48px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.18);
+  transform:rotate(0deg) translateY(-12px) scale(1.04) !important;
+  box-shadow:0 28px 56px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.18);
+  border-color:rgba(0,229,204,.45);
+  z-index:5;
 }
-/* Centre frame = larger */
+
+/* Centre frame — tallest, upright */
 .hgal-frame.hgal-center{
-  width:195px;height:310px;
-  border-color:rgba(0,229,204,.4);
-  box-shadow:0 18px 48px rgba(0,0,0,.55),0 0 0 1px rgba(0,229,204,.2),inset 0 1px 0 rgba(255,255,255,.15);
-  z-index:1;
+  width:clamp(150px,18vw,210px);
+  height:clamp(240px,30vw,340px);
+  border-color:rgba(0,229,204,.35);
+  box-shadow:0 24px 56px rgba(0,0,0,.6),0 0 0 1px rgba(0,229,204,.18),inset 0 1px 0 rgba(255,255,255,.14);
+  z-index:2;
 }
-.hgal-frame img{
-  width:100%;height:100%;object-fit:cover;display:block;
-  border-radius:20px;
-}
-/* placeholder when no photo */
+
+.hgal-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+/* placeholder */
 .hgal-frame-ph{
   width:100%;height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
-  font-size:2.5rem;color:rgba(255,255,255,.15);
+  font-size:2.2rem;color:rgba(255,255,255,.12);
 }
-.hgal-frame-ph span{font-size:.6rem;font-weight:700;color:var(--txt3);letter-spacing:.1em;}
+.hgal-frame-ph span{font-size:.56rem;font-weight:700;color:var(--txt3);letter-spacing:.1em;text-transform:uppercase;}
 .hgal-hint{
-  text-align:center;margin-top:.6rem;
-  font-size:.56rem;color:var(--txt3);font-weight:700;letter-spacing:.1em;
+  text-align:center;padding:.5rem 0;
+  font-size:.54rem;color:var(--txt3);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
 }
 
 /* ─── SECTIONS — ultra-glassy ─── */
@@ -477,13 +505,14 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 .pimg-photo{width:100%;height:130px;object-fit:cover;display:block;}
 .pimg-wrap{width:100%;height:130px;overflow:hidden;background:linear-gradient(135deg,rgba(0,229,204,.06),rgba(0,229,204,.01));display:flex;align-items:center;justify-content:center;}
 
-/* ─── GAMING CARDS — inline expand on hover/tap ─── */
+/* ─── GAMING CARDS — square grid, up to 5 per row, expand on hover/tap ─── */
 .game-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
-  gap:.75rem;
+  /* auto-fill: min 100px, max 1fr — naturally fills 5 per row on wide screens */
+  grid-template-columns:repeat(auto-fill,minmax(max(100px,(100% - 4*.6rem)/5),1fr));
+  gap:.6rem;
   margin-top:1.2rem;
-  align-items:start; /* so expanded card doesn't shift siblings */
+  align-items:start;
 }
 
 .game-card{
@@ -493,57 +522,47 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
   background:rgba(255,255,255,.03);
   cursor:pointer;
   overflow:hidden;
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
   user-select:none;
   -webkit-tap-highlight-color:transparent;
-  /* height transitions from collapsed to expanded */
-  transition:
-    border-color .3s ease,
-    background .3s ease,
-    box-shadow .3s ease,
-    transform .3s ease;
+  transition:border-color .3s,background .3s,box-shadow .3s;
 }
-/* Color accent bar at top */
+/* Color accent bar top */
 .game-card::after{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--gc,var(--teal));
-  opacity:0;
-  transition:opacity .3s;
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--gc,var(--teal));opacity:0;transition:opacity .3s;
 }
 .game-card:hover,.game-card.gx{
   border-color:var(--gc,rgba(0,229,204,.4));
   background:rgba(5,13,20,.75);
-  box-shadow:0 10px 28px rgba(0,0,0,.4),0 0 0 1px var(--gc,rgba(0,229,204,.15));
-  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 1px var(--gc,rgba(0,229,204,.12));
 }
 .game-card:hover::after,.game-card.gx::after{opacity:1;}
 
-/* Collapsed face — always visible */
+/* Square face — aspect-ratio keeps it perfectly square when collapsed */
 .game-face{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:.3rem;padding:.9rem .5rem .75rem;
+  gap:.28rem;
+  aspect-ratio:1/1;
+  padding:.5rem;
   position:relative;z-index:1;
 }
-.game-face-icon{font-size:2rem;line-height:1;}
+.game-face-icon{font-size:1.8rem;line-height:1;}
 .game-face-short{
-  font-family:'Sora',sans-serif;font-size:.72rem;font-weight:800;
-  color:var(--txt);text-align:center;
+  font-family:'Sora',sans-serif;font-size:.66rem;font-weight:800;
+  color:var(--txt);text-align:center;line-height:1.2;
 }
 
-/* Detail drawer — hidden by default, expands in place */
+/* Detail — rectangle expansion below the square face */
 .game-detail{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .38s cubic-bezier(.25,.46,.45,.94), opacity .3s;
-  opacity:0;
-  border-top:1px solid transparent;
+  max-height:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.25,.46,.45,.94),opacity .28s;
+  opacity:0;border-top:1px solid transparent;
 }
 .game-card:hover .game-detail,
 .game-card.gx .game-detail{
-  max-height:200px;
-  opacity:1;
+  max-height:160px;opacity:1;
   border-top-color:rgba(255,255,255,.07);
 }
 .game-detail-inner{
@@ -786,9 +805,9 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 
 @media(max-width:900px){.hdr-stats{display:none;}.wl{grid-template-columns:1fr!important;}.contact-grid{grid-template-columns:1fr!important;}.wexp-chart{gap:.5rem;}}
 @media(max-width:768px){
-  .hero-inner{grid-template-columns:1fr;gap:1.5rem;}
-  .hgal-frame{width:130px;height:210px;}
-  .hgal-frame.hgal-center{width:155px;height:245px;}
+  .hero-inner{grid-template-columns:1fr;gap:1.4rem;}
+  /* Mobile game grid: 2-3 per row */
+  .game-grid{grid-template-columns:repeat(auto-fill,minmax(max(90px,(100% - 2*.6rem)/3),1fr));}
   #isc{max-width:320px;margin:0 auto;}
   .sbg{grid-template-columns:1fr;}
   .tcg{grid-template-columns:repeat(3,1fr);}
@@ -807,8 +826,8 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
   .section{padding:3rem 1.1rem;}
   .tcg{grid-template-columns:repeat(3,1fr);gap:1rem;}
   #site-header{width:calc(100vw - 1.2rem);padding:0 .8rem;}
-  /* Force max 2 cols on mobile for status + oweb tiles */
   .statg,.oweb-grid{grid-template-columns:1fr 1fr !important;}
+  .game-grid{grid-template-columns:1fr 1fr !important;}
   .wexp-chart{gap:.4rem;height:180px;}
   .wexp-axis{font-size:.5rem;}
 }
@@ -854,10 +873,10 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
       </div>
     </div>
   </div>
-  <!-- Full-width photo gallery strip below -->
-  <div class="hero-gallery-strip">
+  <!-- Row 2: full-width gallery -->
+  <div class="hero-gallery-row">
     <div class="hgal-track" id="hgal-track"></div>
-    <div class="hgal-hint">← Drag or scroll to browse photos →</div>
+    <div class="hgal-hint">← Drag to browse →</div>
   </div>
 </section>
 
@@ -1364,59 +1383,72 @@ function rdrHeroGallery(){
   if(!track)return;
   track.innerHTML='';
   const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
-  const count=photos.length||5;
 
-  if(!photos.length){
-    // Placeholder phone frames
-    for(let i=0;i<5;i++){
+  // Tilt classes for visual depth — matches reference design
+  const tiltMap=(i,total)=>{
+    const mid=Math.floor(total/2);
+    const offset=i-mid;
+    if(offset===0)return'hgal-center';
+    if(offset===-1||offset===1)return offset<0?'hgal-side-l':'hgal-side-r';
+    return offset<0?'hgal-side-l2':'hgal-side-r2';
+  };
+
+  const makeFrames=(urls)=>{
+    const n=urls.length;
+    urls.forEach((url,i)=>{
       const fr=document.createElement('div');
-      fr.className='hgal-frame'+(i===2?' hgal-center':'');
-      fr.innerHTML=`<div class="hgal-frame-ph"><span>🖼</span><span>Add photo</span></div>`;
-      track.appendChild(fr);
-    }
-  } else {
-    // Double the photos for seamless loop
-    const loop=[...photos,...photos];
-    loop.forEach((url,i)=>{
-      const mid=Math.floor(photos.length/2);
-      const isCenter=(i%photos.length===mid);
-      const fr=document.createElement('div');
-      fr.className='hgal-frame'+(isCenter?' hgal-center':'');
-      const img=document.createElement('img');
-      img.src=url;img.alt='Gallery';
-      img.onerror=function(){fr.innerHTML='<div class="hgal-frame-ph"><span>🖼</span></div>';};
-      fr.appendChild(img);
+      fr.className='hgal-frame '+tiltMap(i,n);
+      if(url&&url.trim()&&url!=='ph'){
+        const img=document.createElement('img');
+        img.src=url;img.alt='Photo';
+        img.onerror=()=>{fr.innerHTML='<div class="hgal-frame-ph"><span>🖼</span><span>Photo</span></div>';};
+        fr.appendChild(img);
+      }else{
+        fr.innerHTML='<div class="hgal-frame-ph"><span>🖼</span><span>Add photo</span></div>';
+      }
       track.appendChild(fr);
     });
+  };
+
+  if(!photos.length){
+    makeFrames(['ph','ph','ph','ph','ph']);
+  } else {
+    // Duplicate for seamless infinite loop
+    makeFrames([...photos,...photos]);
   }
 
-  // Auto-scroll — smooth continuous leftward drift
   startGalleryScroll(track);
 
-  // Drag-to-scroll
-  let isDragging=false,startX=0,scrollLeft=0;
-  track.addEventListener('mousedown',e=>{isDragging=true;startX=e.pageX-track.offsetLeft;scrollLeft=track.scrollLeft;track.style.cursor='grabbing';});
-  track.addEventListener('mouseleave',()=>{isDragging=false;track.style.cursor='grab';});
-  track.addEventListener('mouseup',()=>{isDragging=false;track.style.cursor='grab';});
-  track.addEventListener('mousemove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-track.offsetLeft;track.scrollLeft=scrollLeft-(x-startX);});
+  // Drag-to-scroll (mouse)
+  let isDrag=false,dStartX=0,dScroll=0;
+  track.addEventListener('mousedown',e=>{isDrag=true;dStartX=e.pageX;dScroll=track.scrollLeft;track.style.cursor='grabbing';});
+  document.addEventListener('mouseup',()=>{isDrag=false;track.style.cursor='grab';});
+  track.addEventListener('mousemove',e=>{
+    if(!isDrag)return;e.preventDefault();
+    track.scrollLeft=dScroll-(e.pageX-dStartX);
+  });
 }
 
-let galRAF=null;
+let galRAF=null,galPaused=false;
 function startGalleryScroll(el){
   if(galRAF)cancelAnimationFrame(galRAF);
-  let lastTime=0;
-  const speed=0.4; // px per ms
-  function step(ts){
-    if(!el.matches(':hover')&&!el.matches(':active')){
-      const dt=ts-lastTime;
-      el.scrollLeft+=speed*Math.min(dt,50);
-      // Loop: when we've scrolled past half (the duplicated half), reset to start
-      if(el.scrollLeft>=el.scrollWidth/2){el.scrollLeft=0;}
+  el.addEventListener('mouseenter',()=>galPaused=true);
+  el.addEventListener('mouseleave',()=>galPaused=false);
+  el.addEventListener('touchstart',()=>galPaused=true,{passive:true});
+  el.addEventListener('touchend',()=>{setTimeout(()=>galPaused=false,1200);},{passive:true});
+  let prev=0;
+  const SPEED=0.5; // px per ms
+  function tick(ts){
+    if(!galPaused){
+      const dt=Math.min(ts-prev,50);
+      el.scrollLeft+=SPEED*dt;
+      // Seamless loop at halfway point
+      if(el.scrollLeft>=el.scrollWidth/2)el.scrollLeft=0;
     }
-    lastTime=ts;
-    galRAF=requestAnimationFrame(step);
+    prev=ts;
+    galRAF=requestAnimationFrame(tick);
   }
-  galRAF=requestAnimationFrame(step);
+  galRAF=requestAnimationFrame(tick);
 }
 
 /* ══ 3D CARD ══ */
