@@ -53,150 +53,98 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 /* ─── HERO ─── */
 #hero{position:relative;z-index:1;padding:5rem 2rem;min-height:calc(100vh - var(--hdr));display:flex;align-items:center;}
 .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:440px 1fr;gap:4rem;align-items:center;width:100%;}
-#isc{
-  perspective:900px;
-  perspective-origin:50% 50%;
-  width:100%;
-  max-width:460px;
-  /* Use aspect-ratio to prevent any distortion on resize */
-  aspect-ratio:85.6/54; /* standard card ratio */
-  cursor:pointer;
-  position:relative;
-}
-#id-card{
-  position:absolute;inset:0;
-  transform-style:preserve-3d;
-  transform-origin:50% 50%;
-  border-radius:18px;
-  will-change:transform;
-}
-.idf{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
 
-/* ── FRONT: deep blue gradient like the reference ── */
-.id-front{
-  background:linear-gradient(135deg,#0d4a8a 0%,#1565c0 30%,#0d6eaa 60%,#0a3d72 100%);
-  border:1px solid rgba(255,255,255,.2);
-  box-shadow:0 24px 64px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.15);
-  position:relative;
-}
-/* Diagonal sheen overlay */
-.id-front::before{
-  content:'';position:absolute;inset:0;border-radius:20px;pointer-events:none;
-  background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 45%,rgba(255,255,255,.06) 100%);
-}
-/* Subtle polygon texture */
-.id-front::after{
-  content:'';position:absolute;inset:0;border-radius:20px;pointer-events:none;
-  background:
-    linear-gradient(60deg,rgba(255,255,255,.04) 25%,transparent 25%),
-    linear-gradient(120deg,rgba(255,255,255,.03) 25%,transparent 25%);
-  background-size:80px 80px;
-}
 
-/* ── FRONT layout ── */
-.id-cf{position:relative;z-index:2;width:100%;height:100%;padding:1rem 1.2rem;display:flex;flex-direction:column;}
-
-/* Top row: brand left, barcode+avatar right */
-.id-top-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.6rem;}
-.id-brand-logo{display:flex;align-items:baseline;gap:0;}
-.id-brand-logo .logo-aiv{font-family:'Sora',sans-serif;font-size:1.35rem;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 1px 4px rgba(0,0,0,.4);}
-.id-brand-logo .logo-one{font-family:'Sora',sans-serif;font-size:1.35rem;font-weight:900;color:#F04D5C;letter-spacing:-.02em;text-shadow:0 1px 4px rgba(0,0,0,.4);}
-
-/* Barcode + avatar stacked right */
-.id-top-right{display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;}
-.id-barcode-wrap{display:flex;gap:.5px;align-items:flex-end;}
-.id-barcode-wrap span{display:block;background:rgba(255,255,255,.9);border-radius:.5px;}
-.id-avatar-box{
-  width:72px;height:72px;border-radius:8px;
-  background:linear-gradient(135deg,#b8d4f0,#c9dcf0,#9fbde8);
-  border:2px solid rgba(255,255,255,.6);
-  display:flex;align-items:center;justify-content:center;
-  font-size:2.6rem;overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
-.id-avatar-box img{width:100%;height:100%;object-fit:cover;}
-
-/* Middle: SIM + NFC + phone row */
-.id-mid-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex:1;align-content:flex-end;flex-wrap:wrap;}
-
-/* Gold SIM chip */
-.id-sim{
-  width:36px;height:28px;border-radius:4px;flex-shrink:0;
-  background:linear-gradient(135deg,#B8860B,#F5D57A,#DAA520,#F0C040,#B8860B);
-  box-shadow:0 2px 8px rgba(184,134,11,.6),inset 0 1px 0 rgba(255,255,255,.4);
-  display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:1.5px;padding:4px;
-  position:relative;
-}
-.id-sim::before{content:'';position:absolute;inset:0;border-radius:4px;background:linear-gradient(135deg,rgba(255,255,255,.35),transparent 55%);pointer-events:none;}
-.id-sim-cell{background:rgba(100,70,0,.5);border-radius:1px;}
-.id-sim-cell.notch{background:transparent;}
-
-/* NFC waves SVG-style */
-.id-nfc-wrap{display:flex;align-items:center;gap:.2rem;}
-.id-nfc-waves{display:flex;align-items:center;gap:2px;}
-.id-nfc-arc{display:block;border:2px solid rgba(255,255,255,.85);border-left:none;border-radius:0 50px 50px 0;}
-
-/* Phone number */
-.id-phone{font-family:'Sora',sans-serif;font-size:.92rem;font-weight:700;color:#fff;letter-spacing:.12em;text-shadow:0 1px 4px rgba(0,0,0,.4);}
-
-/* Name at bottom */
-.id-name-row{margin-top:auto;}
-.id-name{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.5);}
-.id-name-sub{font-size:.52rem;color:rgba(255,255,255,.65);letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-top:.15rem;}
-
-/* ── BACK ── */
-.id-back{
-  background:linear-gradient(135deg,#0d4a8a 0%,#1565c0 30%,#0d6eaa 60%,#0a3d72 100%);
-  border:1px solid rgba(255,255,255,.15);
-  transform:rotateY(180deg);
-  box-shadow:0 24px 64px rgba(0,0,0,.8);
-  position:relative;
-}
-.id-back::before{content:'';position:absolute;inset:0;border-radius:20px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 50%);}
-.id-cb{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;}
-
-/* Magnetic stripe */
-.id-mag-stripe{
-  width:100%;height:52px;margin-top:1.1rem;
-  background:linear-gradient(180deg,#1a1a1a 0%,#0a0a0a 40%,#2a2a2a 70%,#111 100%);
-  box-shadow:inset 0 2px 4px rgba(0,0,0,.8),inset 0 -1px 2px rgba(255,255,255,.05);
-  flex-shrink:0;
-}
-
-/* Signature strip */
-.id-sig-area{display:flex;align-items:stretch;margin:.65rem 1.1rem 0;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.2);box-shadow:0 1px 4px rgba(0,0,0,.3);}
-.id-sig-lines{flex:1;background:#f8f9fa;display:flex;flex-direction:column;justify-content:space-evenly;padding:.25rem .4rem;gap:2px;}
-.id-sig-line{height:1.5px;background:rgba(180,200,220,.7);border-radius:1px;}
-.id-sig-cvv{
-  width:44px;background:#e8ecf0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Sora',sans-serif;font-size:.85rem;font-weight:800;
-  color:#333;border-left:1px solid rgba(0,0,0,.12);
-}
-
-/* QR code area */
-.id-qr-row{display:flex;justify-content:center;align-items:center;flex:1;padding:.5rem;}
-canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rendering:pixelated;}
-
-.flip-hint{font-size:.62rem;color:var(--txt3);font-weight:600;letter-spacing:.08em;text-align:center;margin-top:.52rem;}
-
-/* ── HERO INTRO ── */
+/* ── HERO ── */
+#hero{position:relative;z-index:1;padding:4.5rem 2rem 2rem;}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
 .hero-intro{color:var(--txt);}
-.h-name{font-family:'Sora',sans-serif;font-size:clamp(2rem,3.6vw,3rem);font-weight:800;line-height:1.05;letter-spacing:-.04em;margin-bottom:.32rem;}
+.h-role{font-size:.82rem;font-weight:700;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.55rem;}
+.h-name{font-family:'Sora',sans-serif;font-size:clamp(2rem,3.8vw,3.2rem);font-weight:800;line-height:1.05;letter-spacing:-.04em;margin-bottom:1.1rem;}
 .h-name .acc{color:var(--teal);}
-.h-role{font-size:.88rem;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.9rem;}
-.h-hls{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.05rem;}
-.h-hl{text-align:center;border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:.68rem .38rem;background:rgba(255,255,255,.04);backdrop-filter:blur(16px);}
-.hv{font-family:'Sora',sans-serif;font-size:1.25rem;font-weight:800;color:var(--teal);line-height:1;}
-.hl{font-size:.58rem;color:var(--txt3);font-weight:600;margin-top:.14rem;text-transform:uppercase;letter-spacing:.06em;}
-.h-meta{display:flex;gap:.8rem;flex-wrap:wrap;}
-.h-mi{display:flex;align-items:center;gap:.25rem;font-size:.78rem;color:var(--txt3);font-weight:500;}
+.h-addr-grid{display:flex;flex-direction:column;gap:.45rem;}
+.h-addr-row{display:flex;flex-direction:column;gap:.1rem;padding:.5rem .7rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:var(--rs);}
+.h-addr-lbl{font-size:.56rem;font-weight:800;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;}
+.h-addr-val{font-size:.8rem;color:var(--txt2);line-height:1.5;}
+/* Hero right col */
+.hero-side{display:flex;flex-direction:column;gap:1.2rem;}
+.h-side-tag{font-size:.6rem;font-weight:800;color:var(--teal);letter-spacing:.18em;text-transform:uppercase;}
+.h-side-sub{font-size:.86rem;color:var(--txt2);line-height:1.65;}
+.h-side-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.2rem;}
+.h-side-stat{text-align:center;padding:.6rem .3rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--rs);}
+.h-side-val{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;color:var(--teal);line-height:1;}
+.h-side-lbl{font-size:.52rem;color:var(--txt3);font-weight:600;margin-top:.18rem;text-transform:uppercase;letter-spacing:.06em;}
 
-/* ── HERO ADDRESS ── */
-.h-addr-grid{display:flex;flex-direction:column;gap:.52rem;margin-top:.9rem;}
-.h-addr-row{display:flex;flex-direction:column;gap:.12rem;padding:.55rem .75rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rs);}
-.h-addr-lbl{font-size:.6rem;font-weight:800;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;}
-.h-addr-val{font-size:.82rem;color:var(--txt2);line-height:1.5;}
+/* ── HERO PHOTO GALLERY — horizontal with phone-frame cards ── */
+/* Gallery lives BELOW the 2-col hero on desktop, full-width */
+.hero-gallery-strip{
+  max-width:1100px;
+  margin:2.5rem auto 0;
+  position:relative;
+  overflow:hidden;
+}
+/* Fade edges */
+.hero-gallery-strip::before,
+.hero-gallery-strip::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+}
+.hero-gallery-strip::before{left:0;background:linear-gradient(90deg,var(--dk) 0%,transparent 100%);}
+.hero-gallery-strip::after{right:0;background:linear-gradient(270deg,var(--dk) 0%,transparent 100%);}
+
+/* The scrolling track */
+.hgal-track{
+  display:flex;
+  gap:1rem;
+  padding:.5rem 0 1rem;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  /* momentum scrolling on iOS */
+  -webkit-overflow-scrolling:touch;
+  cursor:grab;
+}
+.hgal-track:active{cursor:grabbing;}
+.hgal-track::-webkit-scrollbar{display:none;}
+
+/* Phone-frame card */
+.hgal-frame{
+  flex-shrink:0;
+  width:160px;
+  height:260px;
+  border-radius:22px;
+  border:2px solid rgba(255,255,255,.18);
+  overflow:hidden;
+  position:relative;
+  background:rgba(255,255,255,.05);
+  box-shadow:0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12);
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94),box-shadow .35s;
+}
+.hgal-frame:hover{
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 22px 48px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.18);
+}
+/* Centre frame = larger */
+.hgal-frame.hgal-center{
+  width:195px;height:310px;
+  border-color:rgba(0,229,204,.4);
+  box-shadow:0 18px 48px rgba(0,0,0,.55),0 0 0 1px rgba(0,229,204,.2),inset 0 1px 0 rgba(255,255,255,.15);
+  z-index:1;
+}
+.hgal-frame img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  border-radius:20px;
+}
+/* placeholder when no photo */
+.hgal-frame-ph{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  font-size:2.5rem;color:rgba(255,255,255,.15);
+}
+.hgal-frame-ph span{font-size:.6rem;font-weight:700;color:var(--txt3);letter-spacing:.1em;}
+.hgal-hint{
+  text-align:center;margin-top:.6rem;
+  font-size:.56rem;color:var(--txt3);font-weight:700;letter-spacing:.1em;
+}
 
 /* ─── SECTIONS — ultra-glassy ─── */
 .section{position:relative;z-index:1;padding:4rem 2rem;opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s;}
@@ -204,8 +152,8 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .sec-inner{max-width:1100px;margin:0 auto;}
 .gc{
   background:rgba(255,255,255,.03);
-  backdrop-filter:blur(18px) saturate(140%);
-  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  backdrop-filter:blur(6px) saturate(120%);
+  -webkit-backdrop-filter:blur(6px) saturate(120%);
   border:1px solid rgba(255,255,255,.07);
   border-radius:var(--rl);
   box-shadow:0 2px 20px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.05);
@@ -219,8 +167,8 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .ssub{color:var(--txt3);font-size:.9rem;margin-bottom:1.5rem;line-height:1.75;max-width:510px;}
 
 /* ─── POSTS ─── */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:.95rem;margin-top:1.5rem;}
-.pcard{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);overflow:hidden;transition:.28s;backdrop-filter:blur(12px);}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(290px,100%),1fr));gap:.95rem;margin-top:1.5rem;}
+.pcard{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);overflow:hidden;transition:.28s;backdrop-filter:blur(5px);}
 .pcard:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.13);transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.28);}
 .pimg{width:100%;height:115px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;background:linear-gradient(135deg,rgba(0,229,204,.06),rgba(0,229,204,.01));}
 .pbody{padding:1rem;}
@@ -257,11 +205,11 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .cpl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:.86rem;font-weight:800;color:var(--txt);}
 .tcn{font-size:.66rem;color:var(--txt3);text-align:center;font-weight:600;max-width:88px;line-height:1.3;}
 
-/* ─── WORKS — chart left, compact 2-col legend right ─── */
-.wl{display:grid;grid-template-columns:240px 1fr;gap:1.6rem;align-items:start;margin-top:1.5rem;}
+/* ─── WORKS ─── */
+.wl-pie{display:flex;justify-content:center;margin-top:1rem;}
 .ww{position:relative;display:inline-block;}
 #wc{cursor:pointer;display:block;filter:drop-shadow(0 0 16px rgba(0,229,204,.1));}
-.wcl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:90px;}
+.wcl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:100px;line-height:1.2;}
 .wcp{font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;color:var(--teal);line-height:1;}
 .wcn{font-size:.52rem;font-weight:600;color:var(--txt3);margin-top:.12rem;max-width:70px;line-height:1.3;}
 /* Legend: single 2-col grid */
@@ -358,11 +306,9 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 /* ─── STATUS — square auto-fit tiles ─── */
 .statg{
   display:grid;
-  /* auto-fit: fills row, min 120px each; clamp to 2 on mobile via max */
-  grid-template-columns:repeat(auto-fill,minmax(max(120px,(100% - 4*.35rem)/5),1fr));
+  grid-template-columns:repeat(auto-fill,minmax(min(max(120px,(100% - 4*.35rem)/5),100%),1fr));
   gap:.35rem;
   margin-top:1.2rem;
-  justify-content:center;
 }
 .statc{
   position:relative;
@@ -436,10 +382,9 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 /* ─── OTHER WEBSITES — square auto-fit tiles ─── */
 .oweb-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(max(120px,(100% - 4*.35rem)/5),1fr));
+  grid-template-columns:repeat(auto-fill,minmax(min(max(120px,(100% - 4*.35rem)/5),100%),1fr));
   gap:.35rem;
   margin-top:1.2rem;
-  justify-content:center;
 }
 .oweb-card{
   position:relative;
@@ -455,8 +400,8 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
   cursor:pointer;text-decoration:none;
   overflow:hidden;
   transition:background .2s,border-color .2s,box-shadow .2s;
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
   user-select:none;
   -webkit-tap-highlight-color:transparent;
 }
@@ -682,7 +627,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .vab{margin:1.35rem auto 0;display:block;width:fit-content;}
 
 /* ─── FOOTER ─── */
-#sf{position:relative;z-index:1;background:rgba(5,13,20,.85);backdrop-filter:blur(32px);border-top:1px solid rgba(255,255,255,.07);padding:3rem 2rem 1.6rem;}
+#sf{position:relative;z-index:1;background:rgba(5,13,20,.85);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,.07);padding:3rem 2rem 1.6rem;}
 .fi2{max-width:1100px;margin:0 auto;}
 .fgr{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1.8rem;margin-bottom:1.8rem;}
 .flt{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:.4rem;color:var(--txt);}
@@ -736,7 +681,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .mo{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1rem;}
 .mo.open{display:flex;animation:oi .2s ease;}
 @keyframes oi{from{opacity:0}to{opacity:1}}
-.modal{background:rgba(13,31,45,.97);backdrop-filter:blur(32px);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);max-width:510px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.7);animation:mi .25s cubic-bezier(.25,.46,.45,.94);}
+.modal{background:rgba(13,31,45,.97);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);max-width:510px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.7);animation:mi .25s cubic-bezier(.25,.46,.45,.94);}
 @keyframes mi{from{opacity:0;transform:translateY(-12px) scale(.97)}to{opacity:1;transform:none}}
 .mhdr{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;border-bottom:1px solid rgba(255,255,255,.08);}
 .mtitle{font-family:'Sora',sans-serif;font-size:.9rem;color:var(--txt);font-weight:800;}
@@ -744,7 +689,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 .mclose:hover{color:var(--txt);}
 .mbody{padding:1.4rem;}
 .mftr{padding:.65rem 1.4rem 1.4rem;display:flex;gap:.52rem;justify-content:flex-end;}
-.cbox{background:rgba(13,31,45,.97);backdrop-filter:blur(32px);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);max-width:325px;padding:1.65rem;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.7);animation:mi .25s ease;}
+.cbox{background:rgba(13,31,45,.97);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);max-width:325px;padding:1.65rem;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.7);animation:mi .25s ease;}
 .cbox p{font-size:.88rem;color:var(--txt2);margin-bottom:1.1rem;line-height:1.6;}
 .br{display:flex;gap:.58rem;justify-content:center;}
 
@@ -841,8 +786,10 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 
 @media(max-width:900px){.hdr-stats{display:none;}.wl{grid-template-columns:1fr!important;}.contact-grid{grid-template-columns:1fr!important;}.wexp-chart{gap:.5rem;}}
 @media(max-width:768px){
-  .hero-inner{grid-template-columns:1fr;gap:2.1rem;}
-  #isc{max-width:330px;height:205px;margin:0 auto;}
+  .hero-inner{grid-template-columns:1fr;gap:1.5rem;}
+  .hgal-frame{width:130px;height:210px;}
+  .hgal-frame.hgal-center{width:155px;height:245px;}
+  #isc{max-width:320px;margin:0 auto;}
   .sbg{grid-template-columns:1fr;}
   .tcg{grid-template-columns:repeat(3,1fr);}
   .wl{grid-template-columns:1fr!important;}
@@ -886,91 +833,31 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
     <button class="btn bgl sm" onclick="openHeroEditModal()">✏ Edit Hero</button>
   </div>
   <div class="hero-inner">
-    <div>
-      <div id="isc">
-        <div id="id-card">
-          <!-- FRONT -->
-          <div class="idf id-front">
-            <div class="id-cf">
-              <!-- Top row: AIV1 logo LEFT, barcode+avatar RIGHT -->
-              <div class="id-top-row">
-                <div class="id-brand-logo">
-                  <span class="logo-aiv">AIV</span><span class="logo-one">1</span>
-                </div>
-                <div class="id-top-right">
-                  <!-- Barcode -->
-                  <div class="id-barcode-wrap" id="h-bc-el"></div>
-                  <!-- Avatar -->
-                  <div class="id-avatar-box" id="h-av-el">👤</div>
-                </div>
-              </div>
-              <!-- SIM chip + NFC waves + phone -->
-              <div class="id-mid-row">
-                <div class="id-sim">
-                  <div class="id-sim-cell notch"></div>
-                  <div class="id-sim-cell"></div>
-                  <div class="id-sim-cell"></div>
-                  <div class="id-sim-cell"></div>
-                  <div class="id-sim-cell"></div>
-                  <div class="id-sim-cell"></div>
-                  <div class="id-sim-cell"></div>
-                  <div class="id-sim-cell"></div>
-                  <div class="id-sim-cell"></div>
-                </div>
-                <!-- NFC arcs -->
-                <div class="id-nfc-wrap">
-                  <div class="id-nfc-waves">
-                    <span class="id-nfc-arc" style="width:8px;height:12px;border-width:1.8px;opacity:.5;"></span>
-                    <span class="id-nfc-arc" style="width:13px;height:20px;border-width:1.8px;opacity:.7;"></span>
-                    <span class="id-nfc-arc" style="width:18px;height:28px;border-width:1.8px;opacity:.9;"></span>
-                  </div>
-                </div>
-                <div class="id-phone" id="h-cp-el">0919 290 7124</div>
-              </div>
-              <!-- Name bottom -->
-              <div class="id-name-row">
-                <div class="id-name" id="h-nm-el">MARK AIVONE D. ROSALES</div>
-                <div class="id-name-sub" id="h-tl-el">IT SUPPORT SPECIALIST · AIV1</div>
-              </div>
-            </div>
-          </div>
-          <!-- BACK -->
-          <div class="idf id-back">
-            <div class="id-cb">
-              <!-- Magnetic stripe -->
-              <div class="id-mag-stripe"></div>
-              <!-- Signature strip + CVV -->
-              <div class="id-sig-area">
-                <div class="id-sig-lines">
-                  <div class="id-sig-line"></div>
-                  <div class="id-sig-line"></div>
-                  <div class="id-sig-line"></div>
-                  <div class="id-sig-line"></div>
-                  <div class="id-sig-line"></div>
-                </div>
-                <div class="id-sig-cvv">123</div>
-              </div>
-              <!-- QR code -->
-              <div class="id-qr-row">
-                <canvas id="id-qr" width="80" height="80"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="flip-hint">[ HOVER TO TILT · TAP / CLICK TO FLIP ]</div>
-    </div>
-    <!-- HERO RIGHT COL -->
+    <!-- COL 1: Name + info -->
     <div class="hero-intro">
-      <div class="h-name" id="h-ni-el">Mark Aivone<br><span class="acc">D. Rosales</span></div>
       <div class="h-role" id="h-it-el">Computer Operator</div>
-      <!-- bio line removed per request -->
+      <div class="h-name" id="h-ni-el">Mark Aivone<br><span class="acc">D. Rosales</span></div>
       <div class="h-addr-grid" id="h-addr-grid">
         <div class="h-addr-row"><span class="h-addr-lbl">🏠 Residential</span><span class="h-addr-val" id="h-res-el">Dicaloyungan, Brgy. Zabali, Baler, Aurora</span></div>
         <div class="h-addr-row"><span class="h-addr-lbl">🏢 Office</span><span class="h-addr-val" id="h-off-el">ATC Compound Setan, Brgy. Calabuanan, Baler, Aurora</span></div>
         <div class="h-addr-row"><span class="h-addr-lbl">🏛️ Company</span><span class="h-addr-val" id="h-cmp-el">Provincial Government of Aurora (PGA)</span></div>
       </div>
     </div>
+    <!-- COL 2: Stats / highlights -->
+    <div class="hero-side" id="hero-side">
+      <div class="h-side-tag">// AIV1 · Portfolio</div>
+      <div class="h-side-sub">IT Support Specialist &amp; Computer Operator based in Aurora, Philippines.</div>
+      <div class="h-side-meta">
+        <div class="h-side-stat"><div class="h-side-val">5+</div><div class="h-side-lbl">Years Experience</div></div>
+        <div class="h-side-stat"><div class="h-side-val">7+</div><div class="h-side-lbl">Certifications</div></div>
+        <div class="h-side-stat"><div class="h-side-val">PGA</div><div class="h-side-lbl">Current Employer</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- Full-width photo gallery strip below -->
+  <div class="hero-gallery-strip">
+    <div class="hgal-track" id="hgal-track"></div>
+    <div class="hgal-hint">← Drag or scroll to browse photos →</div>
   </div>
 </section>
 
@@ -994,22 +881,26 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
     </div></div>
   </section>
   <section class="section" id="works-section" style="display:none;">
-    <div class="sec-inner"><div class="gc">
-      <div class="slbl">// Work Distribution</div><h2 class="stitle">My Works</h2>
-      <p class="ssub">Click a segment or legend item to explore each responsibility.</p>
-      <div class="wl" id="wl-container">
-        <!-- Col 1: Chart -->
-        <div class="ww">
-          <canvas id="wc" width="230" height="230"></canvas>
-          <div class="wcl"><div class="wcp" id="wcp">100%</div><div class="wcn" id="wcn">All Works</div></div>
+    <div class="sec-inner">
+      <!-- Row 1: Pie chart in its own card -->
+      <div class="gc" style="margin-bottom:.85rem;">
+        <div class="slbl">// Work Distribution</div><h2 class="stitle">My Works</h2>
+        <p class="ssub">Click a segment or legend item to explore.</p>
+        <div class="wl-pie">
+          <div class="ww">
+            <canvas id="wc" width="230" height="230"></canvas>
+            <div class="wcl"><div class="wcp" id="wcp">100%</div><div class="wcn" id="wcn">All Works</div></div>
+          </div>
         </div>
-        <!-- Col 2: Compact legend grid -->
+      </div>
+      <!-- Row 2: Legend grid in its own card -->
+      <div class="gc">
         <div class="wleg-wrap">
-          <div class="wleg-header">// Work Distribution</div>
+          <div class="wleg-header">// Details</div>
           <div class="wleg-grid" id="wleg-grid"></div>
         </div>
       </div>
-    </div></div>
+    </div>
   </section>
   <section class="section" id="workexp-section" style="display:none;">
     <div class="sec-inner"><div class="gc">
@@ -1206,7 +1097,6 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
       <div style="margin:.48rem 0 .2rem;padding:.18rem .62rem;font-size:.52rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.18em;">Sections</div>
       <div id="ssl-list"></div>
       <div style="margin:.48rem 0 .2rem;padding:.18rem .62rem;font-size:.52rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.18em;">More</div>
-      <div class="ani" onclick="showAS('workexp',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>Experience</div>
       <div class="ani" onclick="showAS('footer',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="18" x2="21" y2="18"/><line x1="3" y1="12" x2="15" y2="12"/></svg>Footer</div>
       <div class="ani" onclick="showAS('add-new',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add Section</div>
       <div class="ani" onclick="showAS('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
@@ -1226,13 +1116,21 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
       <div class="ads" id="admin-header"><div class="adst">Header Nav</div><div class="adc"><p style="font-size:.8rem;color:var(--txt3);margin-bottom:.65rem;">Select sections in header (max 4):</p><div id="anl"></div></div></div>
       <div class="ads" id="admin-hero">
         <div class="adst">Hero</div>
-        <div class="atabs"><div class="atab active" onclick="swTab('ah','intro',this)">Intro</div><div class="atab" onclick="swTab('ah','card',this)">ID Card</div></div>
+        <div class="atabs"><div class="atab active" onclick="swTab('ah','intro',this)">Intro</div><div class="atab" onclick="swTab('ah','gallery',this)">Gallery</div><div class="atab" onclick="swTab('ah','card',this)">Archived</div></div>
         <div class="atp active" id="ah-tab-intro"><div class="adc">
           <div class="fg"><label class="fl">Name</label><input class="fi" id="ah-t" oninput="S.h.title=this.value;updCard();updIntro();save()"></div>
           <div class="fg"><label class="fl">Role</label><input class="fi" id="ah-r" oninput="S.h.role=this.value;updIntro();save()"></div>
           <div class="fg"><label class="fl">Residential Address</label><input class="fi" id="ah-res" oninput="S.h.resAddr=this.value;st('h-res-el',this.value);save()"></div>
           <div class="fg"><label class="fl">Office Address</label><input class="fi" id="ah-off" oninput="S.h.offAddr=this.value;st('h-off-el',this.value);save()"></div>
           <div class="fg"><label class="fl">Company</label><input class="fi" id="ah-cmp" oninput="S.h.company=this.value;st('h-cmp-el',this.value);save()"></div>
+        </div></div>
+        <div class="atp" id="ah-tab-gallery"><div class="adc">
+          <p style="font-size:.78rem;color:var(--txt3);margin-bottom:.65rem;">Add image URLs (one per line) or upload photos for the hero gallery.</p>
+          <div class="fg"><label class="fl">Photo URLs (one per line)</label><textarea class="fi" id="ah-photos" rows="5" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg" oninput="S.h.photos=this.value.split('\n').map(s=>s.trim()).filter(Boolean);rdrHeroGallery();save()"></textarea></div>
+          <div class="fg"><label class="fl">Upload Photos</label>
+            <label class="btn sm bgl" style="cursor:pointer;">⬆ Upload<input type="file" accept="image/*" multiple onchange="heroGalUpload(this)" style="display:none;"></label>
+          </div>
+          <div style="font-size:.64rem;color:var(--txt3);margin-top:.35rem;">Photos scroll automatically in hero. Hover to pause.</div>
         </div></div>
         <div class="atp" id="ah-tab-card"><div class="adc">
           <div class="fg"><label class="fl">Title Line / Role</label><input class="fi" id="ah-tl" oninput="S.h.titleLine=this.value;updCard();save()"></div>
@@ -1245,7 +1143,7 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
           <div class="fg"><label class="fl">Serial / Phone (CP: 09XXXXXXXXX)</label><input class="fi" id="ah-sr" oninput="S.h.serial=this.value;updCard();save()"></div>
           <div class="fg"><label class="fl">Email (back of card)</label><input class="fi" id="ah-em" oninput="S.h.email=this.value;save()"></div>
           <div class="fg"><label class="fl">Back Text / Sub</label><textarea class="fi" id="ah-sub" rows="2" oninput="S.h.sub=this.value;save()"></textarea></div>
-          <div class="fg"><label class="fl">QR URL</label><input class="fi" id="ah-qr" placeholder="https://..." oninput="S.h.qrUrl=this.value;updCard();save()"></div>
+          <div class="fg"><label class="fl">QR URL</label><input class="fi" id="ah-qr" placeholder="https://..." oninput="S.h.qrUrl=this.value;save()"></div>
         </div></div>
       </div>
       <div class="ads" id="admin-sec-order"><div class="adst">Section Order</div><p style="font-size:.8rem;color:var(--txt3);margin-bottom:1rem;">Drag ⠿ or ▲▼ to reorder. 👁 to show/hide.</p><div class="sol" id="sol"></div></div>
@@ -1384,41 +1282,39 @@ canvas#id-qr{border:3px solid #fff;background:#fff;border-radius:4px;image-rende
 <button id="gt" onclick="goTop()">↑</button>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ══ QUANTUM CANVAS ══ */
+/* ══ QUANTUM CANVAS — fixed, no parallax ══ */
 (()=>{
   const c=document.getElementById('qc');const ctx=c.getContext('2d');
-  let W,H,nodes=[],scrollY=0,mx=0,my=0;
+  let W,H,nodes=[],mx=0,my=0;
   const N=80,MD=155;
   function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
   function init(){nodes=[];for(let i=0;i<N;i++)nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.32,vy:(Math.random()-.5)*.32,r:Math.random()*1.7+.4,p:Math.random()*Math.PI*2});}
   function draw(){
     ctx.clearRect(0,0,W,H);
-    const py=scrollY*.11;
     nodes.forEach(n=>{n.p+=.016;n.x+=n.vx;n.y+=n.vy;if(n.x<-15)n.x=W+15;if(n.x>W+15)n.x=-15;if(n.y<-15)n.y=H+15;if(n.y>H+15)n.y=-15;});
     for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
       const a=nodes[i],b=nodes[j];
-      const dx=a.x-b.x,dy=a.y-py-(b.y-py);
+      const dx=a.x-b.x,dy=a.y-b.y;
       const d=Math.sqrt(dx*dx+dy*dy);
       if(d<MD){
-        const mdx=(a.x+b.x)/2-mx,mdy=(a.y+b.y)/2-my-py;
+        const mdx=(a.x+b.x)/2-mx,mdy=(a.y+b.y)/2-my;
         const md2=Math.sqrt(mdx*mdx+mdy*mdy);
         const boost=md2<180?((180-md2)/180)*.35:0;
-        ctx.beginPath();ctx.moveTo(a.x,a.y-py);ctx.lineTo(b.x,b.y-py);
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
         ctx.strokeStyle=`rgba(0,229,204,${(1-d/MD)*.22+boost})`;ctx.lineWidth=.5;ctx.stroke();
       }
     }
     nodes.forEach(n=>{
       const g=Math.sin(n.p)*.38+.62;
-      const gr=ctx.createRadialGradient(n.x,n.y-py,0,n.x,n.y-py,n.r*3);
+      const gr=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
       gr.addColorStop(0,`rgba(0,229,204,${g*.85})`);gr.addColorStop(1,'rgba(0,229,204,0)');
-      ctx.beginPath();ctx.arc(n.x,n.y-py,n.r*3,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
-      ctx.beginPath();ctx.arc(n.x,n.y-py,n.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,229,204,${g})`;ctx.fill();
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,229,204,${g})`;ctx.fill();
     });
     requestAnimationFrame(draw);
   }
   resize();init();draw();
   window.addEventListener('resize',()=>{resize();init();});
-  window.addEventListener('scroll',()=>{scrollY=window.scrollY;});
   window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 })();
 
@@ -1447,19 +1343,81 @@ function genBC(){
     bc.appendChild(s);
   }
 }
-function updCard(){
+function updCard(){/* ID card removed */}
+function updIntro(){
   const h=S.h;
-  // Front
-  const nm=document.getElementById('h-nm-el');if(nm)nm.textContent=(h.title||'MARK AIVONE D. ROSALES').toUpperCase();
-  const tl=document.getElementById('h-tl-el');if(tl)tl.textContent=(h.titleLine||'IT SUPPORT SPECIALIST')+' · AIV1';
-  const cp=document.getElementById('h-cp-el');if(cp){const raw=h.serial||'';const num=raw.split('CP: ')[1]||'0919 290 7124';cp.textContent=num.replace(/(\d{4})(\d{3})(\d{4})/,'$1 $2 $3');}
-  // Avatar
-  const av=document.getElementById('h-av-el');
-  if(av){if(h.avatarUrl){av.innerHTML=`<img src="${h.avatarUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;" onerror="this.parentElement.textContent='👤'">`;} else av.textContent=h.avatar||'👤';}
-  genBC();
-  drawQR(document.getElementById('id-qr'),h.qrUrl||location.href);
+  const ne=document.getElementById('h-ni-el');
+  if(ne){
+    const parts=(h.title||'Mark Aivone D. Rosales').split(' ');
+    const last=parts.pop();const first=parts.join(' ');
+    ne.innerHTML=`${first}<br><span class="acc">${last}</span>`;
+  }
+  st('h-it-el',h.role||'Computer Operator');
+  st('h-res-el',h.resAddr||'');
+  st('h-off-el',h.offAddr||'');
+  st('h-cmp-el',h.company||'');
+  rdrHeroGallery();
 }
-function updIntro(){const h=S.h;const ne=document.getElementById('h-ni-el');if(ne){const parts=(h.title||'Mark Aivone D. Rosales').split(' ');const last=parts.pop();const first=parts.join(' ');ne.innerHTML=`${first}<br><span class="acc">${last}</span>`;}st('h-it-el',h.role||'Computer Operator');st('h-res-el',h.resAddr||'');st('h-off-el',h.offAddr||'');st('h-cmp-el',h.company||'');}
+
+function rdrHeroGallery(){
+  const track=document.getElementById('hgal-track');
+  if(!track)return;
+  track.innerHTML='';
+  const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
+  const count=photos.length||5;
+
+  if(!photos.length){
+    // Placeholder phone frames
+    for(let i=0;i<5;i++){
+      const fr=document.createElement('div');
+      fr.className='hgal-frame'+(i===2?' hgal-center':'');
+      fr.innerHTML=`<div class="hgal-frame-ph"><span>🖼</span><span>Add photo</span></div>`;
+      track.appendChild(fr);
+    }
+  } else {
+    // Double the photos for seamless loop
+    const loop=[...photos,...photos];
+    loop.forEach((url,i)=>{
+      const mid=Math.floor(photos.length/2);
+      const isCenter=(i%photos.length===mid);
+      const fr=document.createElement('div');
+      fr.className='hgal-frame'+(isCenter?' hgal-center':'');
+      const img=document.createElement('img');
+      img.src=url;img.alt='Gallery';
+      img.onerror=function(){fr.innerHTML='<div class="hgal-frame-ph"><span>🖼</span></div>';};
+      fr.appendChild(img);
+      track.appendChild(fr);
+    });
+  }
+
+  // Auto-scroll — smooth continuous leftward drift
+  startGalleryScroll(track);
+
+  // Drag-to-scroll
+  let isDragging=false,startX=0,scrollLeft=0;
+  track.addEventListener('mousedown',e=>{isDragging=true;startX=e.pageX-track.offsetLeft;scrollLeft=track.scrollLeft;track.style.cursor='grabbing';});
+  track.addEventListener('mouseleave',()=>{isDragging=false;track.style.cursor='grab';});
+  track.addEventListener('mouseup',()=>{isDragging=false;track.style.cursor='grab';});
+  track.addEventListener('mousemove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-track.offsetLeft;track.scrollLeft=scrollLeft-(x-startX);});
+}
+
+let galRAF=null;
+function startGalleryScroll(el){
+  if(galRAF)cancelAnimationFrame(galRAF);
+  let lastTime=0;
+  const speed=0.4; // px per ms
+  function step(ts){
+    if(!el.matches(':hover')&&!el.matches(':active')){
+      const dt=ts-lastTime;
+      el.scrollLeft+=speed*Math.min(dt,50);
+      // Loop: when we've scrolled past half (the duplicated half), reset to start
+      if(el.scrollLeft>=el.scrollWidth/2){el.scrollLeft=0;}
+    }
+    lastTime=ts;
+    galRAF=requestAnimationFrame(step);
+  }
+  galRAF=requestAnimationFrame(step);
+}
 
 /* ══ 3D CARD ══ */
 (()=>{
@@ -1468,56 +1426,66 @@ function updIntro(){const h=S.h;const ne=document.getElementById('h-ni-el');if(n
   if(!sc||!card)return;
 
   let flipped=false;
-  let bobRaf=null;
   let hovering=false;
+  let bobRaf=null;
 
-  // Keep perspective origin centered so flip stays in place
-  sc.style.perspectiveOrigin='50% 50%';
-  card.style.transformOrigin='50% 50%';
+  // The card flips around its own Y axis, centered in place.
+  // transform-origin is set on the card itself, perspective on parent.
+  card.style.transformOrigin='center center';
 
-  function setTransform(ry,rx,rz,animate){
-    card.style.transition=animate?`transform ${animate}s cubic-bezier(.25,.46,.45,.94)`:'transform .08s linear';
-    card.style.transform=`rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz||0}deg)`;
+  function applyTransform(ry, rx, rz, dur){
+    if(dur){
+      card.style.transition=`transform ${dur}s cubic-bezier(.25,.46,.45,.94)`;
+    } else {
+      card.style.transition='transform .06s linear';
+    }
+    card.style.transform=`rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg)`;
   }
 
-  // Bob idle animation — gentle tilt only, no Y rotation change
+  // Gentle idle bob — only small rotateX/Z, never changes Y base
   function bob(){
     if(!hovering){
-      const t=Date.now()/3200;
-      const baseY=flipped?180:0;
-      setTransform(baseY, Math.sin(t)*2.2, Math.sin(t*.65)*.5, false);
+      const t=Date.now()/3400;
+      applyTransform(
+        flipped?180:0,
+        Math.sin(t)*1.8,
+        Math.sin(t*.6)*.4,
+        null
+      );
     }
     bobRaf=requestAnimationFrame(bob);
   }
   bob();
 
-  sc.addEventListener('mouseenter',()=>{hovering=true;});
-  sc.addEventListener('mouseleave',()=>{
-    hovering=false;
-    // Snap back cleanly — no translate, just the base Y rotation
-    setTransform(flipped?180:0, 0, 0, .75);
-  });
+  sc.addEventListener('mouseenter',()=>{ hovering=true; });
+
   sc.addEventListener('mousemove',e=>{
     if(!hovering)return;
     const r=sc.getBoundingClientRect();
-    const rx=((e.clientY-(r.top+r.height/2))/r.height)*16;
-    const ry=(flipped?180:0)-(((e.clientX-(r.left+r.width/2))/r.width)*16);
-    setTransform(ry, rx, 0, false);
+    const nx=(e.clientX-r.left)/r.width-.5;   // -0.5 to +0.5
+    const ny=(e.clientY-r.top)/r.height-.5;
+    const baseY=flipped?180:0;
+    applyTransform(baseY - nx*18, ny*16, 0, null);
   });
 
-  // Click = flip in place — Y rotation only, no translate
-  sc.addEventListener('click',()=>{
+  sc.addEventListener('mouseleave',()=>{
+    hovering=false;
+    applyTransform(flipped?180:0, 0, 0, .7);
+  });
+
+  // Click flip — pure Y axis rotation, stays in exact same position
+  function doFlip(){
     flipped=!flipped;
     hovering=false;
-    setTransform(flipped?180:0, 0, 0, .65);
-  });
+    applyTransform(flipped?180:0, 0, 0, .6);
+  }
 
-  // Touch tap support
-  sc.addEventListener('touchend',e=>{
+  sc.addEventListener('click', doFlip);
+
+  // Touch: prevent default to avoid double-fire with click
+  sc.addEventListener('touchend', e=>{
     e.preventDefault();
-    flipped=!flipped;
-    hovering=false;
-    setTransform(flipped?180:0, 0, 0, .65);
+    doFlip();
   },{passive:false});
 })();
 
@@ -1531,7 +1499,7 @@ const S={
   adminKey:'Aivone',isAdmin:false,snd:true,contactEmail:'kramkeas@gmail.com',
   confirmCb:null,editPostId:null,curShareId:null,editFlinkId:null,editCertId:null,editStatId:null,
   nextId:4,hidden:[],navVis:['home','posts','skills','works','certificates','mystatus','otherwebs','gaming','contact'],
-  h:{title:'Mark Aivone D. Rosales',titleLine:'Computer Operator',avatar:'💻',clearance:'IT SPECIALIST',serial:'ISSUED: 2026 · CP: 09192907124',sub:'Digitally Connected. Explore and Enjoy!',qrUrl:'',role:'Computer Operator',email:'kramkeas@gmail.com',resAddr:'Dicaloyungan, Brgy. Zabali, Baler, Aurora',offAddr:'ATC Compound Setan, Brgy. Calabuanan, Baler, Aurora',company:'Provincial Government of Aurora (PGA)'},
+  h:{title:'Mark Aivone D. Rosales',titleLine:'Computer Operator',avatar:'💻',clearance:'IT SPECIALIST',serial:'ISSUED: 2026 · CP: 09192907124',sub:'Digitally Connected. Explore and Enjoy!',qrUrl:'',role:'Computer Operator',email:'kramkeas@gmail.com',resAddr:'Dicaloyungan, Brgy. Zabali, Baler, Aurora',offAddr:'ATC Compound Setan, Brgy. Calabuanan, Baler, Aurora',company:'Provincial Government of Aurora (PGA)',photos:[]},
   posts:[{id:1,icon:'💻',image:'',title:'Welcome to my Portfolio',excerpt:'Hi! I am Mark Aivone D. Rosales, a Computer Operator at the Provincial Government of Aurora.',hearts:0,shares:0,date:'2026-04-01',time:'08:00'},{id:2,icon:'📋',image:'',title:'What I Do',excerpt:'From hardware troubleshooting to activity documentation — here is a quick look at my daily responsibilities.',hearts:0,shares:0,date:'2026-04-02',time:'09:00'},{id:3,icon:'🏆',image:'',title:'Recent Training',excerpt:'Attended PNPKI Orientation and Cybersecurity Awareness by DICT at Annex Capitol Building, Baler.',hearts:0,shares:0,date:'2026-04-03',time:'10:00'}],
   skills:[{id:'sk1',name:'Hardware & Components',pct:20,color:'#00E5CC'},{id:'sk2',name:'Operating Systems',pct:95,color:'#00E5CC'},{id:'sk3',name:'Network & Connectivity',pct:80,color:'#00B8A3'},{id:'sk4',name:'Software Troubleshooting',pct:50,color:'#00B8A3'},{id:'sk5',name:'Data Management',pct:95,color:'#00D4B8'},{id:'sk6',name:'System Security',pct:90,color:'#00D4B8'}],
   tools:[{id:'te1',name:'Word',pct:85,color:'#185ABD'},{id:'te2',name:'Excel',pct:80,color:'#1E7145'},{id:'te3',name:'PowerPoint',pct:85,color:'#B7472A'},{id:'te4',name:'Outlook',pct:95,color:'#0072C6'},{id:'te5',name:'Teams',pct:95,color:'#464EB8'},{id:'te6',name:'Access',pct:20,color:'#A4373A'},{id:'te7',name:'Zoom',pct:95,color:'#2D8CFF'},{id:'te8',name:'Canva',pct:60,color:'#00C4CC'}],
@@ -2044,8 +2012,26 @@ function updStats(){const th=S.posts.reduce((a,p)=>a+p.hearts,0);const hs=docume
 /* ══ HERO EDIT ══ */
 function saveHero(){const get=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};const h=S.h;h.title=get('he-t')||h.title;h.role=get('he-r')||h.role;h.resAddr=get('he-res')||h.resAddr;h.offAddr=get('he-off')||h.offAddr;h.company=get('he-cmp')||h.company;h.clearance=get('he-cl')||h.clearance;h.titleLine=get('he-tl')||h.titleLine;h.avatar=get('he-av')||h.avatar;h.serial=get('he-sr')||h.serial;h.sub=get('he-sub')||h.sub;h.qrUrl=get('he-qr');updCard();updIntro();cm2('m-hero');showToast('Updated ✓');playClick('success');save();}
 function openHeroEditModal(){const h=S.h;const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};set('he-t',h.title);set('he-r',h.role);set('he-res',h.resAddr);set('he-off',h.offAddr);set('he-cmp',h.company);set('he-cl',h.clearance);set('he-tl',h.titleLine);set('he-av',h.avatar);set('he-sr',h.serial);set('he-qr',h.qrUrl||'');set('he-sub',h.sub);om('m-hero');}
-function popHeroAdmin(){const h=S.h;const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};set('ah-t',h.title);set('ah-r',h.role);set('ah-res',h.resAddr||'');set('ah-off',h.offAddr||'');set('ah-cmp',h.company||'');set('ah-tl',h.titleLine);set('ah-av',h.avatar||'👤');set('ah-avurl',h.avatarUrl||'');set('ah-cl',h.clearance);set('ah-sr',h.serial);set('ah-em',h.email||'');set('ah-sub',h.sub);set('ah-qr',h.qrUrl||'');}
-function avatarUpload(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{S.h.avatarUrl=e.target.result;const el=document.getElementById('ah-avurl');if(el)el.value='[uploaded]';updCard();save();showToast('Avatar updated ✓','green');};r.readAsDataURL(f);}
+function popHeroAdmin(){const h=S.h;const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};set('ah-t',h.title);set('ah-r',h.role);set('ah-res',h.resAddr||'');set('ah-off',h.offAddr||'');set('ah-cmp',h.company||'');set('ah-tl',h.titleLine);set('ah-av',h.avatar||'👤');set('ah-avurl',h.avatarUrl||'');set('ah-cl',h.clearance);set('ah-sr',h.serial);set('ah-em',h.email||'');set('ah-sub',h.sub);set('ah-qr',h.qrUrl||'');const phEl=document.getElementById('ah-photos');if(phEl)phEl.value=(h.photos||[]).filter(p=>!p.startsWith('data:')).join('\n');}
+function avatarUpload(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{S.h.avatarUrl=e.target.result;const el=document.getElementById('ah-avurl');if(el)el.value='[uploaded]';save();showToast('Avatar updated ✓','green');};r.readAsDataURL(f);}
+function heroGalUpload(inp){
+  const files=Array.from(inp.files);if(!files.length)return;
+  if(!S.h.photos)S.h.photos=[];
+  let done=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      S.h.photos.push(e.target.result);
+      done++;
+      if(done===files.length){
+        const el=document.getElementById('ah-photos');
+        if(el)el.value=S.h.photos.filter(p=>!p.startsWith('data:')).join('\n');
+        rdrHeroGallery();save();showToast(`${files.length} photo(s) added ✓`,'green');
+      }
+    };
+    r.readAsDataURL(f);
+  });
+}
 
 /* ══ ELEM DEFS ══ */
 const EDEFS=[
