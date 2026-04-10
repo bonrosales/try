@@ -56,231 +56,160 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 
 
 /* ════════════════════════════════════════
-   HERO — Globe-Express style: full-bleed bg, text bottom-left,
-   portrait gallery cards bottom-right, progress + nav bottom bar
-   Height: fixed 540px. Layout never changes. Col split: 40/60.
+   HERO — 2-col layout:
+   Left: role / name / address details
+   Right: single large framed photo card (current gallery item)
+   Bottom: ‹ dots › navigation
+   Background: quantum canvas shows through (no bg photo overlay)
    ════════════════════════════════════════ */
+
+/* ── Hero shell — no fixed bg, quantum canvas shows through ── */
 #hero{
   position:relative;
   z-index:1;
-  height:540px;min-height:540px;max-height:540px;
-  overflow:hidden;
-  border-radius:0 0 0 0;
+  padding:5rem 2.5rem 1.2rem;
+  min-height:auto;
+  height:auto;
+  max-height:none;
+  overflow:visible;
 }
-
-/* Full-bleed photo background */
+/* hero-bg is kept for when user wants a photo bg, but default = transparent */
 #hero-bg{
   position:absolute;inset:0;z-index:0;
-  background:var(--dk) center/cover no-repeat;
-  transition:background-image .7s cubic-bezier(.4,0,.2,1);
+  background:transparent center/cover no-repeat;
+  transition:background-image .6s ease;
+  pointer-events:none;
 }
-/* Cinematic overlay: dark vignette, heavy bottom-left for text legibility */
 #hero-bg::after{
   content:'';position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 80% 100% at 20% 100%,rgba(5,13,20,.82) 0%,transparent 70%),
-    linear-gradient(to top, rgba(5,13,20,.75) 0%, rgba(5,13,20,.18) 45%, rgba(5,13,20,.05) 100%),
-    linear-gradient(to right, rgba(5,13,20,.35) 0%, transparent 55%);
+    linear-gradient(to top, rgba(5,13,20,.6) 0%, transparent 50%),
+    linear-gradient(to right, rgba(5,13,20,.25) 0%, transparent 60%);
+  opacity:0; /* hidden when no bg photo set */
+  transition:opacity .5s;
 }
+#hero-bg.has-photo::after{opacity:1;}
 
-/* ── Main layout: text bottom-left, gallery bottom-right ── */
+/* ── 2-col grid: details | photo card ── */
 .hero-content{
-  position:absolute;
-  inset:0;
-  z-index:2;
+  position:relative;z-index:2;
   display:grid;
-  grid-template-columns:40% 60%;
-  align-items:end;
-  padding-bottom:68px; /* space for bottom bar */
+  grid-template-columns:1fr 1fr;
+  gap:2.5rem;
+  align-items:center;
+  max-width:1200px;
+  margin:0 auto;
 }
 
-/* ── Col 1: Text details (bottom-left) ── */
+/* ── Col 1: Details ── */
 .hero-intro{
-  padding:0 2rem 2.2rem 2.5rem;
-  display:flex;flex-direction:column;
-  gap:0;
-}
-/* Thin accent line above role — like the reference */
-.h-accent-line{
-  width:32px;height:2px;
-  background:var(--teal);
-  margin-bottom:.55rem;
-  border-radius:2px;
+  display:flex;flex-direction:column;gap:0;
 }
 .h-role{
-  font-size:.68rem;font-weight:700;
-  color:rgba(255,255,255,.75);
-  letter-spacing:.14em;text-transform:uppercase;
-  margin-bottom:.45rem;
+  font-size:.72rem;font-weight:700;
+  color:var(--teal);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:.4rem;
 }
 .h-name{
   font-family:'Sora',sans-serif;
-  font-size:clamp(2rem,3.2vw,3.2rem);
+  font-size:clamp(2rem,3.5vw,3.4rem);
   font-weight:800;line-height:1.0;
-  letter-spacing:-.02em;
-  color:#fff;
-  margin-bottom:1rem;
-  text-shadow:0 2px 16px rgba(0,0,0,.5);
+  letter-spacing:-.02em;color:#fff;
+  margin-bottom:1.1rem;
+  text-shadow:0 2px 14px rgba(0,0,0,.4);
 }
 .h-name .acc{color:var(--teal);}
-/* Address rows — compact horizontal pills */
-.h-addr-grid{display:flex;flex-direction:column;gap:.28rem;}
+.h-addr-grid{display:flex;flex-direction:column;gap:.35rem;}
 .h-addr-row{
-  display:flex;align-items:baseline;gap:.5rem;
-  padding:.3rem .6rem;
-  background:rgba(5,13,20,.48);
-  border:1px solid rgba(255,255,255,.08);
+  display:flex;flex-direction:column;gap:.06rem;
+  padding:.38rem .65rem;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
   border-radius:var(--rs);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
 }
-.h-addr-lbl{
-  font-size:.5rem;font-weight:800;
-  color:var(--teal);letter-spacing:.1em;text-transform:uppercase;
-  flex-shrink:0;
-}
-.h-addr-val{font-size:.72rem;color:rgba(255,255,255,.82);line-height:1.35;}
+.h-addr-lbl{font-size:.52rem;font-weight:800;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;}
+.h-addr-val{font-size:.78rem;color:rgba(255,255,255,.85);line-height:1.4;}
 
-/* ── Col 2: Gallery portrait cards (bottom-right) ── */
-.hero-gallery-cards{
-  display:flex;
-  align-items:flex-end;
-  gap:.75rem;
-  padding:0 1.5rem 2.2rem .5rem;
-  overflow:hidden; /* clips rightmost card for depth effect */
-  height:100%;
+/* ── Col 2: Photo display card ── */
+.hero-photo-col{
+  display:flex;flex-direction:column;align-items:center;gap:.9rem;
 }
-.hgc{
-  flex-shrink:0;
-  width:clamp(130px,11vw,165px);
-  height:clamp(190px,16vw,240px);
-  border-radius:16px;
+/* The main framed photo */
+.hero-photo-frame{
+  width:100%;
+  aspect-ratio:4/3;
+  border-radius:18px;
   overflow:hidden;
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.12);
+  box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);
   position:relative;
   cursor:pointer;
-  border:1.5px solid rgba(255,255,255,.14);
-  box-shadow:0 16px 40px rgba(0,0,0,.55);
-  transition:transform .35s cubic-bezier(.25,.46,.45,.94),
-             border-color .3s, box-shadow .35s;
-  background:rgba(255,255,255,.06);
-  /* Slight scale-down on sides for depth */
-  transform:scale(.92) translateY(10px);
+  transition:box-shadow .3s,border-color .3s;
 }
-.hgc:first-child{transform:scale(.88) translateY(16px);}
-.hgc:nth-child(2){transform:scale(.94) translateY(6px);}
-.hgc.hgc-active,.hgc:nth-child(3){
-  transform:scale(1.0) translateY(0);
-  border-color:rgba(255,255,255,.28);
-  box-shadow:0 22px 55px rgba(0,0,0,.65);
-  z-index:2;
+.hero-photo-frame:hover{
+  border-color:rgba(0,229,204,.4);
+  box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(0,229,204,.15);
 }
-.hgc:nth-child(4){transform:scale(.94) translateY(6px);}
-.hgc:nth-child(5){transform:scale(.88) translateY(16px);opacity:.8;}
-.hgc:hover{
-  transform:scale(1.04) translateY(-6px) !important;
-  border-color:rgba(0,229,204,.5);
-  box-shadow:0 26px 60px rgba(0,0,0,.65),0 0 0 1px rgba(0,229,204,.2);
-  z-index:3;
+#hero-photo-img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:opacity .5s ease;
 }
-.hgc.hgal-active{
-  border-color:var(--teal) !important;
-  box-shadow:0 22px 50px rgba(0,0,0,.6),0 0 0 2px var(--teal) !important;
+/* Placeholder when no photo */
+.hero-photo-ph{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  font-size:.75rem;font-weight:700;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;
 }
-.hgc img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
-/* Label overlay on each card — like reference */
-.hgc-label{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:.55rem .65rem;
-  background:linear-gradient(to top, rgba(5,13,20,.88) 0%, transparent 100%);
-  pointer-events:none;
-}
-.hgc-sub{font-size:.48rem;color:rgba(255,255,255,.6);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.15rem;}
-.hgc-name{font-family:'Sora',sans-serif;font-size:.7rem;font-weight:800;color:#fff;line-height:1.25;}
-/* Placeholder */
-.hgc-ph{
-  width:100%;height:100%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;
-  font-size:1.8rem;color:rgba(255,255,255,.1);
-}
-.hgc-ph span{font-size:.5rem;font-weight:700;color:var(--txt3);letter-spacing:.1em;text-transform:uppercase;}
 
-/* ── Bottom bar: progress line + nav arrows + counter ── */
-.hero-bottom-bar{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  z-index:3;
-  height:52px;
-  display:flex;align-items:center;
-  padding:0 2.5rem;
-  gap:1rem;
-}
-/* Progress track */
-.hbb-progress{
-  flex:1;height:2px;
-  background:rgba(255,255,255,.15);
-  border-radius:2px;
-  overflow:hidden;
-  position:relative;
-}
-.hbb-bar{
-  height:100%;
-  background:var(--teal);
-  border-radius:2px;
-  width:0%;
-  transition:width .6s cubic-bezier(.4,0,.2,1);
-}
-/* Nav arrows */
-.hbb-nav{
-  display:flex;gap:.5rem;
+/* ── Dot navigation ── */
+.hero-nav{
+  display:flex;align-items:center;gap:.65rem;
+  position:relative;z-index:2;
+  padding-bottom:1.5rem;
+  justify-content:center;
 }
 .hbb-btn{
-  width:34px;height:34px;
-  border-radius:50%;
-  border:1.5px solid rgba(255,255,255,.25);
-  background:rgba(5,13,20,.4);
-  backdrop-filter:blur(12px);
-  color:#fff;
-  font-size:.75rem;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(10px);
+  color:#fff;font-size:.85rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:background .2s,border-color .2s,transform .2s;
+  flex-shrink:0;
 }
-.hbb-btn:hover{
-  background:rgba(0,229,204,.2);
-  border-color:var(--teal);
-  transform:scale(1.08);
+.hbb-btn:hover{background:rgba(0,229,204,.18);border-color:var(--teal);transform:scale(1.1);}
+.hbb-dots{display:flex;gap:.45rem;align-items:center;}
+.hbb-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,.25);
+  cursor:pointer;
+  transition:background .25s,transform .25s,width .25s;
+  border:none;padding:0;
 }
-/* Counter */
-.hbb-count{
-  font-family:'Sora',sans-serif;
-  font-size:1.1rem;font-weight:800;
-  color:rgba(255,255,255,.55);
-  letter-spacing:.02em;
-  min-width:28px;text-align:right;
+.hbb-dot.active{
+  background:var(--teal);
+  transform:scale(1.2);
+  width:18px;border-radius:4px;
 }
 
-/* ── Mobile: scale down content, keep structure ── */
+/* ── Mobile: stack vertically ── */
 @media(max-width:768px){
-  #hero{height:480px;min-height:480px;max-height:480px;}
-  .hero-intro{padding:0 1rem 1.8rem 1.2rem;}
-  .h-name{font-size:clamp(1.4rem,5vw,2rem);}
-  .h-role{font-size:.58rem;}
-  .h-addr-val{font-size:.6rem;}
-  .hero-gallery-cards{gap:.5rem;padding:0 .8rem 1.8rem .3rem;}
-  .hgc{width:clamp(95px,26vw,130px);height:clamp(140px,38vw,185px);}
+  #hero{padding:4.5rem 1.2rem 1rem;}
+  .hero-content{
+    grid-template-columns:1fr;
+    gap:1.4rem;
+  }
+  .h-name{font-size:clamp(1.8rem,6vw,2.4rem);}
 }
 @media(max-width:520px){
-  #hero{height:420px;min-height:420px;max-height:420px;}
-  .hero-intro{padding:0 .6rem 1.5rem .9rem;}
-  .h-accent-line{display:none;}
-  .h-name{font-size:clamp(1.15rem,4.8vw,1.6rem);}
-  .h-role{font-size:.5rem;}
-  .h-addr-row{padding:.22rem .42rem;}
-  .h-addr-lbl{font-size:.4rem;}
-  .h-addr-val{font-size:.56rem;}
-  .hero-gallery-cards{gap:.38rem;padding:0 .5rem 1.5rem .2rem;}
-  .hgc{width:clamp(80px,24vw,110px);height:clamp(120px,34vw,160px);border-radius:12px;}
-  .hero-bottom-bar{padding:0 1rem;}
+  #hero{padding:4rem 1rem .8rem;}
+  .h-name{font-size:clamp(1.5rem,7vw,2rem);}
+  .h-addr-val{font-size:.72rem;}
+  .hero-photo-frame{border-radius:14px;}
 }
 
 /* ─── SECTIONS — ultra-glassy ─── */
@@ -979,19 +908,15 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 <div id="nav-overflow"></div>
 
 <section id="hero">
-  <!-- Full-bleed background -->
   <div id="hero-bg"></div>
-
-  <!-- Admin edit -->
   <div id="heb" style="position:absolute;top:1rem;right:1rem;z-index:10;display:none;">
     <button class="btn bgl sm" onclick="openHeroEditModal()">✏ Edit Hero</button>
   </div>
 
-  <!-- Main content: text left, gallery cards right -->
+  <!-- 2-col: details left, photo right -->
   <div class="hero-content">
-    <!-- Col 1: Details bottom-left -->
+    <!-- Col 1: Details -->
     <div class="hero-intro">
-      <div class="h-accent-line"></div>
       <div class="h-role" id="h-it-el">Computer Operator</div>
       <div class="h-name" id="h-ni-el">Mark Aivone<br><span class="acc">D. Rosales</span></div>
       <div class="h-addr-grid" id="h-addr-grid">
@@ -1000,18 +925,19 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
         <div class="h-addr-row"><span class="h-addr-lbl">🏛️ Company</span><span class="h-addr-val" id="h-cmp-el">Provincial Government of Aurora (PGA)</span></div>
       </div>
     </div>
-    <!-- Col 2: Portrait gallery cards bottom-right -->
-    <div class="hero-gallery-cards" id="hgal-track"></div>
-  </div>
-
-  <!-- Bottom bar: progress + nav + counter -->
-  <div class="hero-bottom-bar">
-    <div class="hbb-nav">
-      <button class="hbb-btn" id="hbb-prev" onclick="hgalNav(-1)">‹</button>
-      <button class="hbb-btn" id="hbb-next" onclick="hgalNav(1)">›</button>
+    <!-- Col 2: Single framed photo + dot nav -->
+    <div class="hero-photo-col">
+      <div class="hero-photo-frame" onclick="hgalNav(1)">
+        <img id="hero-photo-img" src="" alt="Gallery" style="display:none;">
+        <div class="hero-photo-ph" id="hero-photo-ph"><span>PHOTO</span></div>
+      </div>
+      <!-- Dot navigation -->
+      <div class="hero-nav">
+        <button class="hbb-btn" onclick="hgalNav(-1)">‹</button>
+        <div class="hbb-dots" id="hbb-dots"></div>
+        <button class="hbb-btn" onclick="hgalNav(1)">›</button>
+      </div>
     </div>
-    <div class="hbb-progress"><div class="hbb-bar" id="hbb-bar"></div></div>
-    <div class="hbb-count" id="hbb-count">01</div>
   </div>
 </section>
 
@@ -1511,30 +1437,24 @@ function updIntro(){
   st('h-off-el',h.offAddr||'');
   st('h-cmp-el',h.company||'');
   rdrHeroGallery();
-  // Restore background on reload
-  const photos=(h.photos||[]).filter(p=>p&&p.trim());
-  if(photos.length)setHeroBg(photos[0]);
+  // Gallery restores from rdrHeroGallery()
 }
 
-/* ══ HERO GALLERY — Globe-Express portrait cards ══ */
+/* ══ HERO GALLERY — single framed photo + dot indicators ══ */
 let hgalIdx=0;
 
-function setHeroBg(url, idx){
-  const bg=document.getElementById('hero-bg');
-  if(!bg)return;
-  if(url&&url!=='ph') bg.style.backgroundImage=`url('${url}')`;
-  else bg.style.backgroundImage='none';
-  // Update card active state
-  document.querySelectorAll('.hgc').forEach((c,i)=>{
-    c.classList.toggle('hgal-active', i===idx);
-  });
-  // Update counter
-  const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
-  const count=photos.length||1;
-  const bar=document.getElementById('hbb-bar');
-  const cnt=document.getElementById('hbb-count');
-  if(bar)bar.style.width=((((idx||0)%count)+1)/count*100)+'%';
-  if(cnt)cnt.textContent=String(((idx||0)%count)+1).padStart(2,'0');
+function setHeroBg(url,idx){
+  const img=document.getElementById('hero-photo-img');
+  const ph=document.getElementById('hero-photo-ph');
+  if(img&&ph){
+    if(url&&url!=='ph'){
+      img.src=url;img.style.display='block';ph.style.display='none';
+    } else {
+      img.style.display='none';ph.style.display='flex';
+    }
+  }
+  // Dots
+  document.querySelectorAll('.hbb-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
   hgalIdx=idx||0;
 }
 
@@ -1542,49 +1462,24 @@ function hgalNav(dir){
   const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
   if(!photos.length)return;
   hgalIdx=(hgalIdx+dir+photos.length)%photos.length;
-  setHeroBg(photos[hgalIdx], hgalIdx);
-  // Scroll the active card into the 3rd position (centre of right col)
-  const track=document.getElementById('hgal-track');
-  if(!track)return;
-  const cards=track.querySelectorAll('.hgc');
-  if(cards[hgalIdx]) cards[hgalIdx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  setHeroBg(photos[hgalIdx],hgalIdx);
 }
 
 function rdrHeroGallery(){
-  const track=document.getElementById('hgal-track');
-  if(!track)return;
-  track.innerHTML='';
+  const dotsEl=document.getElementById('hbb-dots');
   const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
-
-  const makeCard=(url, realIdx)=>{
-    const card=document.createElement('div');
-    card.className='hgc';
-    card.dataset.idx=realIdx;
-    if(url&&url!=='ph'){
-      const img=document.createElement('img');
-      img.src=url;img.alt='Photo';img.draggable=false;
-      img.onerror=()=>{card.innerHTML='<div class="hgc-ph"><span>🖼</span><span>Photo</span></div>';};
-      card.appendChild(img);
-      // Label overlay
-      const lbl=document.createElement('div');
-      lbl.className='hgc-label';
-      lbl.innerHTML=`<div class="hgc-sub">// Gallery</div><div class="hgc-name">Photo ${realIdx+1}</div>`;
-      card.appendChild(lbl);
-    } else {
-      card.innerHTML='<div class="hgc-ph"><span>🖼</span><span>Add photo</span></div>';
+  if(dotsEl){
+    dotsEl.innerHTML='';
+    const count=photos.length||1;
+    for(let i=0;i<count;i++){
+      const d=document.createElement('button');
+      d.className='hbb-dot'+(i===0?' active':'');
+      const url=photos[i]||'ph';
+      d.addEventListener('click',()=>setHeroBg(url,i));
+      dotsEl.appendChild(d);
     }
-    card.addEventListener('click',()=>setHeroBg(url, realIdx));
-    return card;
-  };
-
-  if(!photos.length){
-    for(let i=0;i<5;i++) track.appendChild(makeCard('ph',i));
-    return;
   }
-
-  photos.forEach((url,i)=>track.appendChild(makeCard(url,i)));
-  // Default: first photo
-  setHeroBg(photos[0], 0);
+  setHeroBg(photos.length?photos[0]:'ph',0);
 }
 
 /* ══ 3D CARD ══ */
