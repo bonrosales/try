@@ -136,13 +136,15 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 .hero-photo-col{
   display:flex;flex-direction:column;align-items:center;gap:.9rem;
 }
-/* The main framed photo */
+/* Fixed-size photo frame — never changes based on photo or screen */
 .hero-photo-frame{
-  width:100%;
-  aspect-ratio:4/3;
+  /* Fixed dimensions — 4:3 landscape */
+  width:480px;
+  height:360px;
+  flex-shrink:0;
   border-radius:18px;
   overflow:hidden;
-  background:rgba(255,255,255,.04);
+  background:rgba(10,20,35,.7);
   border:1.5px solid rgba(255,255,255,.12);
   box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);
   position:relative;
@@ -153,15 +155,32 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
   border-color:rgba(0,229,204,.4);
   box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 0 1px rgba(0,229,204,.15);
 }
+/* Image always fills the fixed frame — never resizes the container */
 #hero-photo-img{
-  width:100%;height:100%;object-fit:cover;display:block;
-  transition:opacity .5s ease;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+  transition:opacity .45s ease;
 }
-/* Placeholder when no photo */
+/* Placeholder */
 .hero-photo-ph{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
   font-size:.75rem;font-weight:700;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;
+}
+/* Responsive: shrink frame on smaller screens but keep ratio locked */
+@media(max-width:1100px){
+  .hero-photo-frame{width:400px;height:300px;}
+}
+@media(max-width:768px){
+  .hero-photo-frame{width:100%;height:0;padding-bottom:75%;} /* 4:3 via padding trick */
+}
+@media(max-width:520px){
+  .hero-photo-frame{width:100%;height:0;padding-bottom:75%;}
 }
 
 /* ── Dot navigation ── */
@@ -209,7 +228,6 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
   #hero{padding:4rem 1rem .8rem;}
   .h-name{font-size:clamp(1.5rem,7vw,2rem);}
   .h-addr-val{font-size:.72rem;}
-  .hero-photo-frame{border-radius:14px;}
 }
 
 /* ─── SECTIONS — ultra-glassy ─── */
