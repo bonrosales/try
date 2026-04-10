@@ -251,10 +251,21 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 .ssub{color:var(--txt3);font-size:.9rem;margin-bottom:1.5rem;line-height:1.75;max-width:510px;}
 
 /* ─── POSTS ─── */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(290px,100%),1fr));gap:.95rem;margin-top:1.5rem;}
+.pgrid{
+  display:grid;
+  /* Always 2 columns on desktop — auto-fit fills equally */
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;margin-top:1.5rem;
+}
 .pcard{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);overflow:hidden;transition:.28s;backdrop-filter:blur(5px);}
 .pcard:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.13);transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.28);}
-.pimg{width:100%;height:115px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;background:linear-gradient(135deg,rgba(0,229,204,.06),rgba(0,229,204,.01));}
+.pimg{width:100%;height:105px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;background:linear-gradient(135deg,rgba(0,229,204,.06),rgba(0,229,204,.01));}
+/* Mobile: 1 column */
+@media(max-width:600px){
+  .pgrid{grid-template-columns:1fr;}
+  .pimg{height:80px;font-size:1.9rem;}
+  .pbody{padding:.75rem;}
+}
 .pbody{padding:1rem;}
 .pmeta{font-size:.62rem;color:var(--txt3);margin-bottom:.26rem;font-weight:600;}
 .ptitle{font-family:'Sora',sans-serif;font-size:.88rem;color:var(--txt);margin-bottom:.26rem;font-weight:700;line-height:1.4;}
@@ -290,6 +301,26 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 .tcn{font-size:.66rem;color:var(--txt3);text-align:center;font-weight:600;max-width:88px;line-height:1.3;}
 
 /* ─── WORKS ─── */
+/* My Works side-by-side layout */
+.wl-layout{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:2rem;
+  align-items:center;
+  margin-top:.5rem;
+}
+.wl-chart-col{
+  display:flex;justify-content:center;align-items:center;
+  flex-shrink:0;
+}
+.wl-legend-col{
+  display:flex;flex-direction:column;gap:0;
+  min-width:0;
+}
+/* Mobile: stack */
+@media(max-width:640px){
+  .wl-layout{grid-template-columns:1fr;justify-items:center;}
+}
 .wl-pie{display:flex;justify-content:center;margin-top:1rem;}
 .ww{position:relative;display:inline-block;}
 #wc{cursor:pointer;display:block;filter:drop-shadow(0 0 16px rgba(0,229,204,.1));}
@@ -980,22 +1011,24 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
   </section>
   <section class="section" id="works-section" style="display:none;">
     <div class="sec-inner">
-      <!-- Row 1: Pie chart in its own card -->
-      <div class="gc" style="margin-bottom:.85rem;">
-        <div class="slbl">// Work Distribution</div><h2 class="stitle">My Works</h2>
-        <p class="ssub">Click a segment or legend item to explore.</p>
-        <div class="wl-pie">
-          <div class="ww">
-            <canvas id="wc" width="230" height="230"></canvas>
-            <div class="wcl"><div class="wcp" id="wcp">100%</div><div class="wcn" id="wcn">All Works</div></div>
-          </div>
-        </div>
-      </div>
-      <!-- Row 2: Legend grid in its own card -->
       <div class="gc">
-        <div class="wleg-wrap">
-          <div class="wleg-header">// Details</div>
-          <div class="wleg-grid" id="wleg-grid"></div>
+        <div class="slbl">// Work Distribution</div>
+        <h2 class="stitle">My Works</h2>
+        <p class="ssub">Click a segment or legend item to explore.</p>
+        <!-- Side-by-side: pie left, legend right -->
+        <div class="wl-layout">
+          <!-- Pie chart -->
+          <div class="wl-chart-col">
+            <div class="ww">
+              <canvas id="wc" width="260" height="260"></canvas>
+              <div class="wcl"><div class="wcp" id="wcp">100%</div><div class="wcn" id="wcn">All Works</div></div>
+            </div>
+          </div>
+          <!-- Legend -->
+          <div class="wl-legend-col">
+            <div class="wleg-header">// Details</div>
+            <div class="wleg-grid" id="wleg-grid"></div>
+          </div>
         </div>
       </div>
     </div>
