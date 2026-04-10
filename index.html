@@ -56,172 +56,231 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 
 
 /* ════════════════════════════════════════
-   HERO — Fixed rectangle, never changes layout on any device
-   Row A: 2 fixed columns (details left | empty right shows photo)
-   Row B: infinite marquee gallery strip
+   HERO — Globe-Express style: full-bleed bg, text bottom-left,
+   portrait gallery cards bottom-right, progress + nav bottom bar
+   Height: fixed 540px. Layout never changes. Col split: 40/60.
    ════════════════════════════════════════ */
 #hero{
   position:relative;
   z-index:1;
-  /* Fixed height — formal landscape rectangle */
-  height:580px;
-  display:grid;
-  /* Two rows: details+photo area | gallery strip */
-  grid-template-rows:1fr auto;
+  height:540px;min-height:540px;max-height:540px;
   overflow:hidden;
-  padding:0;
-  border-radius:0 0 20px 20px;
-  flex-shrink:0;
+  border-radius:0 0 0 0;
 }
 
-/* Full-bleed background photo */
+/* Full-bleed photo background */
 #hero-bg{
   position:absolute;inset:0;z-index:0;
   background:var(--dk) center/cover no-repeat;
-  transition:background-image .65s ease;
+  transition:background-image .7s cubic-bezier(.4,0,.2,1);
 }
-/* Overlay: heavy left (text column) + bottom, photo shows through right */
+/* Cinematic overlay: dark vignette, heavy bottom-left for text legibility */
 #hero-bg::after{
   content:'';position:absolute;inset:0;
   background:
-    linear-gradient(to right,
-      rgba(5,13,20,.92) 0%,
-      rgba(5,13,20,.75) 35%,
-      rgba(5,13,20,.25) 60%,
-      rgba(5,13,20,.04) 100%
-    ),
-    linear-gradient(to top,
-      rgba(5,13,20,.80) 0%,
-      rgba(5,13,20,.20) 30%,
-      transparent 55%
-    );
+    radial-gradient(ellipse 80% 100% at 20% 100%,rgba(5,13,20,.82) 0%,transparent 70%),
+    linear-gradient(to top, rgba(5,13,20,.75) 0%, rgba(5,13,20,.18) 45%, rgba(5,13,20,.05) 100%),
+    linear-gradient(to right, rgba(5,13,20,.35) 0%, transparent 55%);
 }
 
-/* ── Row A: 2 fixed columns ── */
+/* ── Main layout: text bottom-left, gallery bottom-right ── */
 .hero-content{
-  position:relative;z-index:2;
-  /* Fixed 2-col grid — left=480px details, right=rest empty */
+  position:absolute;
+  inset:0;
+  z-index:2;
   display:grid;
-  grid-template-columns:480px 1fr;
+  grid-template-columns:40% 60%;
   align-items:end;
-  width:100%;
-  max-width:100%;
-  padding:0;
+  padding-bottom:68px; /* space for bottom bar */
 }
 
-/* Col 1 — details */
+/* ── Col 1: Text details (bottom-left) ── */
 .hero-intro{
-  padding:2.5rem 2.5rem 1.8rem;
-  color:var(--txt);
+  padding:0 2rem 2.2rem 2.5rem;
+  display:flex;flex-direction:column;
+  gap:0;
 }
-
-/* Col 2 — intentionally empty, shows background photo */
-.hero-empty{
-  /* empty — background photo visible through here */
+/* Thin accent line above role — like the reference */
+.h-accent-line{
+  width:32px;height:2px;
+  background:var(--teal);
+  margin-bottom:.55rem;
+  border-radius:2px;
 }
-
-/* Typography */
 .h-role{
-  font-size:.72rem;font-weight:800;
-  color:var(--teal);letter-spacing:.18em;text-transform:uppercase;
-  margin-bottom:.5rem;
+  font-size:.68rem;font-weight:700;
+  color:rgba(255,255,255,.75);
+  letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:.45rem;
 }
 .h-name{
   font-family:'Sora',sans-serif;
-  font-size:clamp(1.9rem,2.8vw,3rem);
-  font-weight:800;line-height:1.05;
-  letter-spacing:-.04em;margin-bottom:.9rem;
-  text-shadow:0 2px 10px rgba(0,0,0,.45);
+  font-size:clamp(2rem,3.2vw,3.2rem);
+  font-weight:800;line-height:1.0;
+  letter-spacing:-.02em;
+  color:#fff;
+  margin-bottom:1rem;
+  text-shadow:0 2px 16px rgba(0,0,0,.5);
 }
 .h-name .acc{color:var(--teal);}
-.h-addr-grid{display:flex;flex-direction:column;gap:.35rem;}
+/* Address rows — compact horizontal pills */
+.h-addr-grid{display:flex;flex-direction:column;gap:.28rem;}
 .h-addr-row{
-  display:flex;flex-direction:column;gap:.06rem;
-  padding:.38rem .6rem;
-  background:rgba(5,13,20,.5);
-  border:1px solid rgba(255,255,255,.09);
+  display:flex;align-items:baseline;gap:.5rem;
+  padding:.3rem .6rem;
+  background:rgba(5,13,20,.48);
+  border:1px solid rgba(255,255,255,.08);
   border-radius:var(--rs);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
 }
-.h-addr-lbl{font-size:.52rem;font-weight:800;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;}
-.h-addr-val{font-size:.76rem;color:rgba(255,255,255,.85);line-height:1.4;}
-
-/* ── Row B: Gallery marquee ── */
-.hero-gallery-row{
-  position:relative;z-index:2;
-  width:100%;
-  overflow:hidden;
-  padding:.65rem 0 .75rem;
-  /* Subtle top separator */
-  border-top:1px solid rgba(255,255,255,.07);
-  background:rgba(5,13,20,.35);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-}
-/* Edge fade masks */
-.hero-gallery-row::before,
-.hero-gallery-row::after{
-  content:'';position:absolute;top:0;bottom:0;width:100px;z-index:3;pointer-events:none;
-}
-.hero-gallery-row::before{left:0;background:linear-gradient(90deg,rgba(5,13,20,.9),transparent);}
-.hero-gallery-row::after{right:0;background:linear-gradient(270deg,rgba(5,13,20,.9),transparent);}
-
-/* Marquee track */
-.hgal-track{
-  display:flex;
-  gap:.6rem;
-  width:max-content;
-  animation:hgalScroll 28s linear infinite;
-  padding:0 .5rem;
-}
-.hgal-track:hover{animation-play-state:paused;}
-@keyframes hgalScroll{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-50%);}
-}
-
-/* Landscape thumbnail cards */
-.hgal-frame{
+.h-addr-lbl{
+  font-size:.5rem;font-weight:800;
+  color:var(--teal);letter-spacing:.1em;text-transform:uppercase;
   flex-shrink:0;
-  /* Fixed landscape 16:9 dimensions — never changes */
-  width:172px;
-  height:97px;
-  border-radius:7px;
+}
+.h-addr-val{font-size:.72rem;color:rgba(255,255,255,.82);line-height:1.35;}
+
+/* ── Col 2: Gallery portrait cards (bottom-right) ── */
+.hero-gallery-cards{
+  display:flex;
+  align-items:flex-end;
+  gap:.75rem;
+  padding:0 1.5rem 2.2rem .5rem;
+  overflow:hidden; /* clips rightmost card for depth effect */
+  height:100%;
+}
+.hgc{
+  flex-shrink:0;
+  width:clamp(130px,11vw,165px);
+  height:clamp(190px,16vw,240px);
+  border-radius:16px;
   overflow:hidden;
   position:relative;
   cursor:pointer;
-  border:2px solid rgba(255,255,255,.1);
-  box-shadow:0 3px 10px rgba(0,0,0,.4);
-  transition:transform .28s,border-color .28s,box-shadow .28s;
-  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.14);
+  box-shadow:0 16px 40px rgba(0,0,0,.55);
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94),
+             border-color .3s, box-shadow .35s;
+  background:rgba(255,255,255,.06);
+  /* Slight scale-down on sides for depth */
+  transform:scale(.92) translateY(10px);
 }
-.hgal-frame:hover{
-  transform:translateY(-4px) scale(1.05);
-  border-color:rgba(0,229,204,.55);
-  box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 1px rgba(0,229,204,.25);
+.hgc:first-child{transform:scale(.88) translateY(16px);}
+.hgc:nth-child(2){transform:scale(.94) translateY(6px);}
+.hgc.hgc-active,.hgc:nth-child(3){
+  transform:scale(1.0) translateY(0);
+  border-color:rgba(255,255,255,.28);
+  box-shadow:0 22px 55px rgba(0,0,0,.65);
+  z-index:2;
 }
-.hgal-frame.hgal-active{
-  border-color:var(--teal);
-  box-shadow:0 0 0 2px var(--teal),0 6px 18px rgba(0,0,0,.4);
+.hgc:nth-child(4){transform:scale(.94) translateY(6px);}
+.hgc:nth-child(5){transform:scale(.88) translateY(16px);opacity:.8;}
+.hgc:hover{
+  transform:scale(1.04) translateY(-6px) !important;
+  border-color:rgba(0,229,204,.5);
+  box-shadow:0 26px 60px rgba(0,0,0,.65),0 0 0 1px rgba(0,229,204,.2);
+  z-index:3;
 }
-.hgal-frame img{
-  width:100%;height:100%;
-  object-fit:cover;display:block;
+.hgc.hgal-active{
+  border-color:var(--teal) !important;
+  box-shadow:0 22px 50px rgba(0,0,0,.6),0 0 0 2px var(--teal) !important;
+}
+.hgc img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+/* Label overlay on each card — like reference */
+.hgc-label{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:.55rem .65rem;
+  background:linear-gradient(to top, rgba(5,13,20,.88) 0%, transparent 100%);
   pointer-events:none;
 }
-.hgal-frame-ph{
+.hgc-sub{font-size:.48rem;color:rgba(255,255,255,.6);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.15rem;}
+.hgc-name{font-family:'Sora',sans-serif;font-size:.7rem;font-weight:800;color:#fff;line-height:1.25;}
+/* Placeholder */
+.hgc-ph{
   width:100%;height:100%;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:.25rem;
-  font-size:1.4rem;color:rgba(255,255,255,.12);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;
+  font-size:1.8rem;color:rgba(255,255,255,.1);
 }
-.hgal-frame-ph span{font-size:.48rem;font-weight:700;color:var(--txt3);letter-spacing:.08em;text-transform:uppercase;}
-.hgal-hint{
-  text-align:center;
-  font-size:.5rem;font-weight:700;color:rgba(255,255,255,.35);
-  letter-spacing:.1em;text-transform:uppercase;
-  margin-top:.35rem;pointer-events:none;
+.hgc-ph span{font-size:.5rem;font-weight:700;color:var(--txt3);letter-spacing:.1em;text-transform:uppercase;}
+
+/* ── Bottom bar: progress line + nav arrows + counter ── */
+.hero-bottom-bar{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  z-index:3;
+  height:52px;
+  display:flex;align-items:center;
+  padding:0 2.5rem;
+  gap:1rem;
+}
+/* Progress track */
+.hbb-progress{
+  flex:1;height:2px;
+  background:rgba(255,255,255,.15);
+  border-radius:2px;
+  overflow:hidden;
+  position:relative;
+}
+.hbb-bar{
+  height:100%;
+  background:var(--teal);
+  border-radius:2px;
+  width:0%;
+  transition:width .6s cubic-bezier(.4,0,.2,1);
+}
+/* Nav arrows */
+.hbb-nav{
+  display:flex;gap:.5rem;
+}
+.hbb-btn{
+  width:34px;height:34px;
+  border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.25);
+  background:rgba(5,13,20,.4);
+  backdrop-filter:blur(12px);
+  color:#fff;
+  font-size:.75rem;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s,transform .2s;
+}
+.hbb-btn:hover{
+  background:rgba(0,229,204,.2);
+  border-color:var(--teal);
+  transform:scale(1.08);
+}
+/* Counter */
+.hbb-count{
+  font-family:'Sora',sans-serif;
+  font-size:1.1rem;font-weight:800;
+  color:rgba(255,255,255,.55);
+  letter-spacing:.02em;
+  min-width:28px;text-align:right;
+}
+
+/* ── Mobile: scale down content, keep structure ── */
+@media(max-width:768px){
+  #hero{height:480px;min-height:480px;max-height:480px;}
+  .hero-intro{padding:0 1rem 1.8rem 1.2rem;}
+  .h-name{font-size:clamp(1.4rem,5vw,2rem);}
+  .h-role{font-size:.58rem;}
+  .h-addr-val{font-size:.6rem;}
+  .hero-gallery-cards{gap:.5rem;padding:0 .8rem 1.8rem .3rem;}
+  .hgc{width:clamp(95px,26vw,130px);height:clamp(140px,38vw,185px);}
+}
+@media(max-width:520px){
+  #hero{height:420px;min-height:420px;max-height:420px;}
+  .hero-intro{padding:0 .6rem 1.5rem .9rem;}
+  .h-accent-line{display:none;}
+  .h-name{font-size:clamp(1.15rem,4.8vw,1.6rem);}
+  .h-role{font-size:.5rem;}
+  .h-addr-row{padding:.22rem .42rem;}
+  .h-addr-lbl{font-size:.4rem;}
+  .h-addr-val{font-size:.56rem;}
+  .hero-gallery-cards{gap:.38rem;padding:0 .5rem 1.5rem .2rem;}
+  .hgc{width:clamp(80px,24vw,110px);height:clamp(120px,34vw,160px);border-radius:12px;}
+  .hero-bottom-bar{padding:0 1rem;}
 }
 
 /* ─── SECTIONS — ultra-glassy ─── */
@@ -855,8 +914,20 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 
 @media(max-width:900px){.hdr-stats{display:none;}.wl{grid-template-columns:1fr!important;}.contact-grid{grid-template-columns:1fr!important;}.wexp-chart{gap:.5rem;}}
 @media(max-width:768px){
-  /* hero layout is fixed — never override */
-  /* Mobile game grid: 2-3 per row */
+  /* ── HERO: column split stays 45/55, height stays 520px ──
+     Only reduce content SIZE to fit the smaller left column */
+  .hero-intro{padding:1.4rem 1rem 1.2rem 1.2rem;}
+  .h-role{font-size:.58rem;letter-spacing:.12em;margin-bottom:.3rem;}
+  .h-name{font-size:clamp(1.2rem,5vw,1.8rem);margin-bottom:.6rem;}
+  .h-addr-grid{gap:.22rem;}
+  .h-addr-row{padding:.28rem .45rem;}
+  .h-addr-lbl{font-size:.44rem;}
+  .h-addr-val{font-size:.62rem;line-height:1.3;}
+  /* Gallery thumbnails: shrink for mobile */
+  .hgal-frame{width:110px;height:62px;}
+  .hero-gallery-row{height:90px;min-height:90px;}
+
+  /* Other sections */
   .game-grid{grid-template-columns:repeat(auto-fill,minmax(max(90px,(100% - 2*.6rem)/3),1fr));}
   #isc{max-width:320px;margin:0 auto;}
   .sbg{grid-template-columns:1fr;}
@@ -872,7 +943,17 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
   .ag2{grid-template-columns:1fr;}
 }
 @media(max-width:520px){
-  /* hero fixed — no mobile override */
+  /* ── HERO tiny screens: even smaller text, same 45/55 + 520px ── */
+  .hero-intro{padding:1rem .8rem 1rem 1rem;}
+  .h-role{font-size:.52rem;margin-bottom:.25rem;}
+  .h-name{font-size:clamp(1.05rem,4.5vw,1.5rem);margin-bottom:.5rem;}
+  .h-addr-row{padding:.22rem .38rem;}
+  .h-addr-lbl{font-size:.4rem;}
+  .h-addr-val{font-size:.58rem;}
+  /* Tiny thumbnails */
+  .hgal-frame{width:90px;height:51px;}
+  .hero-gallery-row{height:78px;min-height:78px;}
+
   .section{padding:3rem 1.1rem;}
   .tcg{grid-template-columns:repeat(3,1fr);gap:1rem;}
   #site-header{width:calc(100vw - 1.2rem);padding:0 .8rem;}
@@ -898,18 +979,19 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
 <div id="nav-overflow"></div>
 
 <section id="hero">
-  <!-- Full-screen background (photo from gallery) -->
+  <!-- Full-bleed background -->
   <div id="hero-bg"></div>
 
-  <!-- Admin edit button -->
-  <div id="heb" style="position:absolute;top:1.4rem;right:1.4rem;z-index:10;display:none;">
+  <!-- Admin edit -->
+  <div id="heb" style="position:absolute;top:1rem;right:1rem;z-index:10;display:none;">
     <button class="btn bgl sm" onclick="openHeroEditModal()">✏ Edit Hero</button>
   </div>
 
-  <!-- Row A: 2 fixed columns -->
+  <!-- Main content: text left, gallery cards right -->
   <div class="hero-content">
-    <!-- Col 1: Details -->
+    <!-- Col 1: Details bottom-left -->
     <div class="hero-intro">
+      <div class="h-accent-line"></div>
       <div class="h-role" id="h-it-el">Computer Operator</div>
       <div class="h-name" id="h-ni-el">Mark Aivone<br><span class="acc">D. Rosales</span></div>
       <div class="h-addr-grid" id="h-addr-grid">
@@ -918,14 +1000,18 @@ body{background:var(--dk);color:var(--txt);font-family:'DM Sans',sans-serif;over
         <div class="h-addr-row"><span class="h-addr-lbl">🏛️ Company</span><span class="h-addr-val" id="h-cmp-el">Provincial Government of Aurora (PGA)</span></div>
       </div>
     </div>
-    <!-- Col 2: Empty — background photo shows through -->
-    <div class="hero-empty"></div>
+    <!-- Col 2: Portrait gallery cards bottom-right -->
+    <div class="hero-gallery-cards" id="hgal-track"></div>
   </div>
 
-  <!-- Infinite marquee gallery strip — full width, bottom of hero -->
-  <div class="hero-gallery-row">
-    <div class="hgal-track" id="hgal-track"></div>
-    <div class="hgal-hint">Click photo to change background</div>
+  <!-- Bottom bar: progress + nav + counter -->
+  <div class="hero-bottom-bar">
+    <div class="hbb-nav">
+      <button class="hbb-btn" id="hbb-prev" onclick="hgalNav(-1)">‹</button>
+      <button class="hbb-btn" id="hbb-next" onclick="hgalNav(1)">›</button>
+    </div>
+    <div class="hbb-progress"><div class="hbb-bar" id="hbb-bar"></div></div>
+    <div class="hbb-count" id="hbb-count">01</div>
   </div>
 </section>
 
@@ -1430,18 +1516,38 @@ function updIntro(){
   if(photos.length)setHeroBg(photos[0]);
 }
 
-function setHeroBg(url){
+/* ══ HERO GALLERY — Globe-Express portrait cards ══ */
+let hgalIdx=0;
+
+function setHeroBg(url, idx){
   const bg=document.getElementById('hero-bg');
   if(!bg)return;
-  if(url&&url!=='ph'){
-    bg.style.backgroundImage=`url('${url}')`;
-  } else {
-    bg.style.backgroundImage='none';
-  }
-  // Mark active frame
-  document.querySelectorAll('.hgal-frame').forEach(f=>{
-    f.classList.toggle('hgal-active', f.dataset.url===url);
+  if(url&&url!=='ph') bg.style.backgroundImage=`url('${url}')`;
+  else bg.style.backgroundImage='none';
+  // Update card active state
+  document.querySelectorAll('.hgc').forEach((c,i)=>{
+    c.classList.toggle('hgal-active', i===idx);
   });
+  // Update counter
+  const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
+  const count=photos.length||1;
+  const bar=document.getElementById('hbb-bar');
+  const cnt=document.getElementById('hbb-count');
+  if(bar)bar.style.width=((((idx||0)%count)+1)/count*100)+'%';
+  if(cnt)cnt.textContent=String(((idx||0)%count)+1).padStart(2,'0');
+  hgalIdx=idx||0;
+}
+
+function hgalNav(dir){
+  const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
+  if(!photos.length)return;
+  hgalIdx=(hgalIdx+dir+photos.length)%photos.length;
+  setHeroBg(photos[hgalIdx], hgalIdx);
+  // Scroll the active card into the 3rd position (centre of right col)
+  const track=document.getElementById('hgal-track');
+  if(!track)return;
+  const cards=track.querySelectorAll('.hgc');
+  if(cards[hgalIdx]) cards[hgalIdx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
 }
 
 function rdrHeroGallery(){
@@ -1450,35 +1556,35 @@ function rdrHeroGallery(){
   track.innerHTML='';
   const photos=(S.h.photos||[]).filter(p=>p&&p.trim());
 
-  const makeCard=(url)=>{
-    const fr=document.createElement('div');
-    fr.className='hgal-frame';
-    fr.dataset.url=url||'ph';
+  const makeCard=(url, realIdx)=>{
+    const card=document.createElement('div');
+    card.className='hgc';
+    card.dataset.idx=realIdx;
     if(url&&url!=='ph'){
       const img=document.createElement('img');
-      img.src=url;img.alt='Gallery';
-      img.draggable=false;
-      img.onerror=()=>{fr.innerHTML='<div class="hgal-frame-ph"><span>🖼</span><span>Photo</span></div>';};
-      fr.appendChild(img);
+      img.src=url;img.alt='Photo';img.draggable=false;
+      img.onerror=()=>{card.innerHTML='<div class="hgc-ph"><span>🖼</span><span>Photo</span></div>';};
+      card.appendChild(img);
+      // Label overlay
+      const lbl=document.createElement('div');
+      lbl.className='hgc-label';
+      lbl.innerHTML=`<div class="hgc-sub">// Gallery</div><div class="hgc-name">Photo ${realIdx+1}</div>`;
+      card.appendChild(lbl);
     } else {
-      fr.innerHTML='<div class="hgal-frame-ph"><span>🖼</span><span>Add photo</span></div>';
+      card.innerHTML='<div class="hgc-ph"><span>🖼</span><span>Add photo</span></div>';
     }
-    fr.addEventListener('click',()=>setHeroBg(url));
-    return fr;
+    card.addEventListener('click',()=>setHeroBg(url, realIdx));
+    return card;
   };
 
   if(!photos.length){
-    // Show 8 placeholder frames (duplicated for seamless loop)
-    const placeholders=['ph','ph','ph','ph','ph','ph','ph','ph'];
-    [...placeholders,...placeholders].forEach(u=>track.appendChild(makeCard(u)));
+    for(let i=0;i<5;i++) track.appendChild(makeCard('ph',i));
     return;
   }
 
-  // Duplicate set for seamless CSS infinite loop
-  [...photos,...photos].forEach(url=>track.appendChild(makeCard(url)));
-
-  // Set first photo as default background
-  setHeroBg(photos[0]);
+  photos.forEach((url,i)=>track.appendChild(makeCard(url,i)));
+  // Default: first photo
+  setHeroBg(photos[0], 0);
 }
 
 /* ══ 3D CARD ══ */
